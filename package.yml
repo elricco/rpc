@@ -1,0 +1,25 @@
+package: rpc
+version: '1.0.0'
+author: Tim Filler
+supportpage: https://meinesupportseite.tld
+page:
+  title: 'translate:Print Configurator'
+  perm: rpc[]
+  pjax: false
+  icon: rex-icon fa-print
+  subpages:
+    main:
+      title: 'translate:main'
+      icon: rex-icon fa-print
+      eigener: extra
+    help:
+      title: 'translate:help'
+      icon: rex-icon fa-help
+      eigener: default
+    module:
+      title: 'translate:module'
+      perm: admin
+requires:
+  redaxo: '^5.6'
+  packages:
+    yform: '^3.0'
