@@ -1,24 +1,23 @@
 package: rpc
 version: '1.0.0'
 author: Tim Filler
-supportpage: https://meinesupportseite.tld
+supportpage: https://redaxo.org
 page:
-  title: 'translate:Print Configurator'
+  title: 'translate:rpc'
   perm: rpc[]
   pjax: false
   icon: rex-icon fa-print
   subpages:
-    main:
-      title: 'translate:main'
-      icon: rex-icon fa-print
-      eigener: extra
+    orders:
+      title: 'translate:rpc_orders'
+      icon: rex-icon fa-file
+    configuration:
+      title: 'translate:rpc_config'
+      icon: rex-icon fa-cogs
     help:
-      title: 'translate:help'
+      title: 'translate:rpc_help'
       icon: rex-icon fa-help
       eigener: default
-    module:
-      title: 'translate:module'
-      perm: admin
 requires:
   redaxo: '^5.6'
   packages:
