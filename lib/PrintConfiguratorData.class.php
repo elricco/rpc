@@ -120,14 +120,16 @@ class PrintConfiguratorData
     protected function format_basics()
     {
         $basics = $this->getBasics();
+        $formatted_basics = [];
+        $dom_elements = [];
         foreach ($basics as $key => $basic) {
             if ('order_flat_charge' == $basic['price_type']) {
-                $order_flat_charge .= '<div class="order-flat-charge border-bottom"><div class="row py-1"><div class="col">'.$basic['price_name'].'</div> <div class="col text-right" id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</div></div></div>';
+                $dom_elements['order_flat_charge'] = '<div class="order-flat-charge border-bottom"><div class="row py-1"><div class="col">'.$basic['price_name'].'</div> <div class="col text-right" id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</div></div></div>';
             } elseif ('setup_flat_charge' == $basic['price_type']) {
-                $setup_flat_charge .= '<div class="setup_flat_charge"><span>'.$basic['price_name'].'</span> <span id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</span></div>';
+                $dom_elements['setup_flat_charge'] = '<div class="setup_flat_charge"><span>'.$basic['price_name'].'</span> <span id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</span></div>';
             } elseif ('page_baw' == $basic['price_type'] || 'page_clr' == $basic['price_type']) {
-                $sidebar_price .= '<span>'.$basic['price_name'].'</span> <span id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</span>';
-                $page_prices[$basic['price_type']] = [
+                $dom_elements['sidebar_price'] .= '<span>'.$basic['price_name'].'</span> <span id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</span>';
+                $formatted_basics[$basic['price_type']] = [
                     'type' => $basic['price_type'],
                     'name' => $basic['price_name'],
                     'price' => $basic['price_rate'],
@@ -137,8 +139,8 @@ class PrintConfiguratorData
                     'start' => (!empty($session['amount_'.$basic['price_type']]) ? $session['amount_'.$basic['price_type']] : $basic['pages_min']),
                 ];
             } elseif ('fixation_amount' == $basic['price_type']) {
-                $sidebar_price .= '<span>'.$basic['price_name'].'</span> <span id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</span>';
-                $fixation_amount = [
+                $dom_elements['sidebar_price'] .= '<span>'.$basic['price_name'].'</span> <span id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</span>';
+                $formatted_basics['fixation_amount'] = [
                     'type' => $basic['price_type'],
                     'name' => $basic['price_name'],
                     'min' => $basic['pages_min'],
@@ -160,7 +162,13 @@ class PrintConfiguratorData
             }
         }
 
-        return $basics;
+        $data = [
+            'basics' => $basics,
+            'formatted_basics' => $formatted_basics,
+            'dom_elements' => $dom_elements,
+        ];
+
+        return $data;
     }
 
     public function getData() {
