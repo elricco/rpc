@@ -119,9 +119,8 @@ class PrintConfiguratorData
      */
     protected function format_basics()
     {
-        $basics = self::getBasics();
+        $basics = $this->getBasics();
         foreach ($basics as $key => $basic) {
-            //dump($basic);
             if ('order_flat_charge' == $basic['price_type']) {
                 $order_flat_charge .= '<div class="order-flat-charge border-bottom"><div class="row py-1"><div class="col">'.$basic['price_name'].'</div> <div class="col text-right" id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</div></div></div>';
             } elseif ('setup_flat_charge' == $basic['price_type']) {
@@ -161,6 +160,11 @@ class PrintConfiguratorData
             }
         }
 
+        return $basics;
+    }
+
+    public function getData() {
+        $basics = $this->format_basics();
         return $basics;
     }
 }
