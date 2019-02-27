@@ -171,8 +171,105 @@ class PrintConfiguratorData
         return $data;
     }
 
-    public function getData() {
-        $basics = $this->format_basics();
+    protected function format_papers()
+    {
+        // Get Papers
+        $papers = getPapers();
+
+        // Define output of papers (for later)
+        foreach ($papers as $key => $paper) {
+            if (!isset($paper_default) && empty($paper_default)) {
+                $paper_default = $paper['id'];
+            }
+            $paper_radio_options .= $paper['paper_name'].'<br><small>'.str_replace(array(
+                    ',',
+                    '<p>',
+                    '</p>',
+                ), array('.', '', ''), $paper['paper_description']).'</small>='.$paper['id'];
+            if ($key < (count($papers) - 1)) {
+                $paper_radio_options .= ',';
+            }
+            $paper_radio_attributes[$paper['id']] = [
+                'price' => $paper['paper_price'],
+                'vat' => $paper['vat_rate'],
+                'fixations' => $paper['paper_fixation'],
+                'strength' => $paper['paper_strength'],
+            ];
+        }
+    }
+
+    protected function format_fixations()
+    {
+        // Get Papers
+        $fixations = getFixations();
+
+        // Define output of fixations (for later)
+        foreach ($fixations as $key => $fixation) {
+            if (!isset($fixation_default) && empty($fixation_default)) {
+                $fixation_default = $fixation['id'];
+            }
+            $fixation_radio_options .= $fixation['fixation_name'].'<br><small>'.str_replace(array(
+            ',',
+            '<p>',
+            '</p>',
+        ), array('.', '', ''), $fixation['fixation_description']).'</small>='.$fixation['id'];
+            if ($key < (count($fixations) - 1)) {
+                $fixation_radio_options .= ',';
+            }
+            $fixation_radio_attributes[$fixation['id']] = [
+        'price' => $fixation['fixation_price'],
+        'vat' => $fixation['vat_rate'],
+        'min' => $fixation['min'],
+        'max' => $fixation['max'],
+    ];
+        }
+    }
+
+    protected function format_fixationsAdditions()
+    {
+        // Get Fixation Additions
+        $fixationsAdditions = getFixationsAdditions();
+
+        // Define output of fixations (for later)
+        foreach ($fixationsAdditions as $key => $addition) {
+            $fixation_addition_radio_attributes[$addition['id']] = [
+        'price' => $addition['price'],
+    ];
+        }
+    }
+
+    public function buildVariation($elements = [])
+    {
+        $variation_radio_options = '';
+        foreach ($elements as $key => $variation) {
+            $variation_radio_options .= $variation['name'].'='.$variation['id'];
+            if ($key < (count($elements))) {
+                $variation_radio_options .= ',';
+            }
+        }
+
+        return $variation_radio_options;
+    }
+
+    public function getVariationDefault($elements = [])
+    {
+        foreach ($elements as $key => $variation) {
+            if (!isset($variation_default) && empty($variation_default)) {
+                $variation_default = $variation['id'];
+            }
+        }
+
+        return $variation_default;
+    }
+
+    public function getData()
+    {
+        try {
+            $basics = $this->format_basics();
+        } catch (rex_sql_exception $e) {
+            $basics = 'Couldn\'t get basics: '.$e;
+        }
+
         return $basics;
     }
 }
