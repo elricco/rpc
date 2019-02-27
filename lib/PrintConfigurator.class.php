@@ -1,29 +1,37 @@
 <?php
 /**
- * Class PrintConfigurator
+ * Class PrintConfigurator.
  */
-
-class PrintConfigurator {
-
+class PrintConfigurator
+{
     /**
      * @return array
+     *
      * @throws rex_sql_exception
      */
-    public function getBasics() {
+    public function getBasics()
+    {
         $sql = rex_sql::factory();
-        $query = 'SELECT rex_rpc_general_prices.*, rex_rpc_vat_types.vat_description, rex_rpc_vat_types.vat_rate FROM rex_rpc_general_prices LEFT JOIN rex_rpc_vat_types ON rex_rpc_general_prices.price_vat = rex_rpc_vat_types.id';
+        $query = 'SELECT rex_rpc_general_prices.*, rex_rpc_vat_types.vat_description, rex_rpc_vat_types.vat_rate 
+                  FROM rex_rpc_general_prices 
+                  LEFT JOIN rex_rpc_vat_types 
+                  ON rex_rpc_general_prices.price_vat = rex_rpc_vat_types.id';
         $rows = $sql->getArray($query);
+
         return $rows;
     }
 
     /**
      * @return array
+     *
      * @throws rex_sql_exception
      */
-    public function getPapers() {
+    public function getPapers()
+    {
         $sql = rex_sql::factory();
         $query = 'SELECT rex_rpc_paper_option.*, rex_rpc_vat_types.vat_description, rex_rpc_vat_types.vat_rate FROM rex_rpc_paper_option LEFT JOIN rex_rpc_vat_types ON rex_rpc_paper_option.paper_vat = rex_rpc_vat_types.id';
         $rows = $sql->getArray($query);
+
         return $rows;
     }
 
@@ -31,31 +39,39 @@ class PrintConfigurator {
      * @param $id
      *
      * @return array
+     *
      * @throws rex_sql_exception
      */
-    public function getPapersById($id) {
+    public function getPapersById($id)
+    {
         $sql = rex_sql::factory();
         $query = 'SELECT rex_rpc_paper_option.*, rex_rpc_vat_types.vat_description, rex_rpc_vat_types.vat_rate FROM rex_rpc_paper_option LEFT JOIN rex_rpc_vat_types ON rex_rpc_paper_option.paper_vat = rex_rpc_vat_types.id WHERE rex_rpc_paper_option.id = '.$id;
         $rows = $sql->getArray($query);
+
         return $rows;
     }
 
     /**
      * @return array
+     *
      * @throws rex_sql_exception
      */
-    public function getFixations() {
+    public function getFixations()
+    {
         $sql = rex_sql::factory();
         $query = 'SELECT rex_rpc_fixation_option.*, rex_rpc_vat_types.vat_description, rex_rpc_vat_types.vat_rate FROM rex_rpc_fixation_option LEFT JOIN rex_rpc_vat_types ON rex_rpc_fixation_option.fixation_vat = rex_rpc_vat_types.id';
         $rows = $sql->getArray($query);
+
         return $rows;
     }
 
     /**
      * @return array
+     *
      * @throws rex_sql_exception
      */
-    public function getFixationsAdditions() {
+    public function getFixationsAdditions()
+    {
         $options = [];
 
         $sql = rex_sql::factory();
@@ -66,20 +82,20 @@ class PrintConfigurator {
                 'id' => $result['id'],
                 'name' => $result['name'],
                 'description' => $result['description'],
-                'price' => $result['price']
+                'price' => $result['price'],
             ];
         }
 
-        foreach($rows as $option) {
+        foreach ($rows as $option) {
             $sql2 = rex_sql::factory();
             $query2 = 'SELECT * FROM rex_rpc_fixation_addition_options WHERE fixation_addition_options_relation = '.$option['id'];
             $resultVariation = $sql2->getArray($query2);
-            foreach($resultVariation as $variation) {
+            foreach ($resultVariation as $variation) {
                 $options[$option['id']]['variations'][$variation['id']] = [
                     'id' => $variation['id'],
                     'name' => $variation['fixation_addition_option_name'],
                     'description' => $variation['fixation_addition_options_description'],
-                    'price' => $variation['fixation_addition_options_price']
+                    'price' => $variation['fixation_addition_options_price'],
                 ];
             }
         }
@@ -90,44 +106,45 @@ class PrintConfigurator {
     /**
      * @param $basics
      */
-    public function format_basics($basics) {
-        foreach ( $basics as $key => $basic ) {
+    public function format_basics($basics)
+    {
+        foreach ($basics as $key => $basic) {
             //dump($basic);
-            if ( $basic['price_type'] == 'order_flat_charge' ) {
-                $order_flat_charge .= '<div class="order-flat-charge border-bottom"><div class="row py-1"><div class="col">' . $basic['price_name'] . '</div> <div class="col text-right" id="' . $basic['price_type'] . '" data-price="' . $basic['price_rate'] . '">' . rex_formatter::number( $basic['price_rate'] ) . ' ' . $currency_symbol . '</div></div></div>';
-            } else if ( $basic['price_type'] == 'setup_flat_charge' ) {
-                $setup_flat_charge .= '<div class="setup_flat_charge"><span>' . $basic['price_name'] . '</span> <span id="' . $basic['price_type'] . '" data-price="' . $basic['price_rate'] . '">' . rex_formatter::number( $basic['price_rate'] ) . ' ' . $currency_symbol . '</span></div>';
-            } else if ( $basic['price_type'] == 'page_baw' || $basic['price_type'] == 'page_clr' ) {
-                $sidebar_price                       .= '<span>' . $basic['price_name'] . '</span> <span id="' . $basic['price_type'] . '" data-price="' . $basic['price_rate'] . '">' . rex_formatter::number( $basic['price_rate'] ) . ' ' . $currency_symbol . '</span>';
-                $page_prices[ $basic['price_type'] ] = [
-                    'type'  => $basic['price_type'],
-                    'name'  => $basic['price_name'],
+            if ('order_flat_charge' == $basic['price_type']) {
+                $order_flat_charge .= '<div class="order-flat-charge border-bottom"><div class="row py-1"><div class="col">'.$basic['price_name'].'</div> <div class="col text-right" id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</div></div></div>';
+            } elseif ('setup_flat_charge' == $basic['price_type']) {
+                $setup_flat_charge .= '<div class="setup_flat_charge"><span>'.$basic['price_name'].'</span> <span id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</span></div>';
+            } elseif ('page_baw' == $basic['price_type'] || 'page_clr' == $basic['price_type']) {
+                $sidebar_price .= '<span>'.$basic['price_name'].'</span> <span id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</span>';
+                $page_prices[$basic['price_type']] = [
+                    'type' => $basic['price_type'],
+                    'name' => $basic['price_name'],
                     'price' => $basic['price_rate'],
-                    'vat'   => $basic['vat_rate'],
-                    'min'   => $basic['pages_min'],
-                    'max'   => $basic['pages_max'],
-                    'start' => ( ! empty( $session[ 'amount_' . $basic['price_type'] ] ) ? $session[ 'amount_' . $basic['price_type'] ] : $basic['pages_min'] )
+                    'vat' => $basic['vat_rate'],
+                    'min' => $basic['pages_min'],
+                    'max' => $basic['pages_max'],
+                    'start' => (!empty($session['amount_'.$basic['price_type']]) ? $session['amount_'.$basic['price_type']] : $basic['pages_min']),
                 ];
-            } else if ( $basic['price_type'] == 'fixation_amount' ) {
-                $sidebar_price   .= '<span>' . $basic['price_name'] . '</span> <span id="' . $basic['price_type'] . '" data-price="' . $basic['price_rate'] . '">' . rex_formatter::number( $basic['price_rate'] ) . ' ' . $currency_symbol . '</span>';
+            } elseif ('fixation_amount' == $basic['price_type']) {
+                $sidebar_price .= '<span>'.$basic['price_name'].'</span> <span id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</span>';
                 $fixation_amount = [
                     'type' => $basic['price_type'],
                     'name' => $basic['price_name'],
-                    'min'  => $basic['pages_min'],
-                    'max'  => $basic['pages_max']
+                    'min' => $basic['pages_min'],
+                    'max' => $basic['pages_max'],
                 ];
-            } else if ( $basic['price_type'] == 'data_check_charge' ) {
+            } elseif ('data_check_charge' == $basic['price_type']) {
                 //$sidebar_price .= '<span>'.$basic['price_name'].'</span> <span id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</span>';
-                if ( ! isset( $data_check_default ) && empty( $data_check_default ) ) {
+                if (!isset($data_check_default) && empty($data_check_default)) {
                     $data_check_default = $basic['id'];
                 }
-                $data_check_radio_options .= $basic['price_name'] . '=' . $basic['id'];
-                if ( $key < ( count( $basics ) - 1 ) ) {
+                $data_check_radio_options .= $basic['price_name'].'='.$basic['id'];
+                if ($key < (count($basics) - 1)) {
                     $data_check_radio_options .= ',';
                 }
-                $data_check_radio_attributes[ $basic['id'] ] = [
+                $data_check_radio_attributes[$basic['id']] = [
                     'price' => $basic['price_rate'],
-                    'vat'   => $basic['vat_rate']
+                    'vat' => $basic['vat_rate'],
                 ];
             }
         }
@@ -137,28 +154,29 @@ class PrintConfigurator {
      * @param $order
      *
      * @return array
+     * @throws rex_sql_exception
      */
-    public function calculate_price($order) {
-
+    public function calculate_price($order)
+    {
         // Get Basics
-        $basics = getBasics();
-        foreach ( $basics as $key => $basic ) {
-            if ( $basic['price_type'] == 'page_baw' ) {
-                $pages['baw']  = [
-                    'name'  => $basic['price_name'],
+        $basics = self::getBasics();
+        foreach ($basics as $key => $basic) {
+            if ('page_baw' == $basic['price_type']) {
+                $pages['baw'] = [
+                    'name' => $basic['price_name'],
                     'price' => $basic['price_rate'],
-                    'vat'   => $basic['vat_rate'],
-                    'min'   => $basic['pages_min'],
-                    'max'   => $basic['pages_max']
+                    'vat' => $basic['vat_rate'],
+                    'min' => $basic['pages_min'],
+                    'max' => $basic['pages_max'],
                 ];
             }
-            if ( $basic['price_type'] == 'page_clr' ) {
-                $pages['clr']  = [
-                    'name'  => $basic['price_name'],
+            if ('page_clr' == $basic['price_type']) {
+                $pages['clr'] = [
+                    'name' => $basic['price_name'],
                     'price' => $basic['price_rate'],
-                    'vat'   => $basic['vat_rate'],
-                    'min'   => $basic['pages_min'],
-                    'max'   => $basic['pages_max']
+                    'vat' => $basic['vat_rate'],
+                    'min' => $basic['pages_min'],
+                    'max' => $basic['pages_max'],
                 ];
             }
         }
@@ -176,7 +194,7 @@ class PrintConfigurator {
         $double_sided = $order['double_sided'];
 
         //which paper?
-        $paper = getPapersById($order['paper_options']);
+        $paper = self::getPapersById($order['paper_options']);
 
         $amount_fixation_one = $order['amount_fixation'];
         $amount_fixation_two = $order['amount_fixation_two'];
@@ -184,11 +202,11 @@ class PrintConfigurator {
         //calculate page numbers
         $totalPages = $pages['baw']['amount'] + $pages['clr']['amount'];
         // since it's 0 == false or 1 == true this should do the trick
-        if($double_sided) {
+        if ($double_sided) {
             $totalPages = (($totalPages / 2) * 2) / 2;
             //check if number is odd
-            if($totalPages % 2 != 0) {
-                $totalPages++;
+            if (0 != $totalPages % 2) {
+                ++$totalPages;
             }
         }
         $pages['total']['amount_single'] = $totalPages;
@@ -201,10 +219,9 @@ class PrintConfigurator {
         $totalPagesTwo = $pages['total']['amount_single'] * $amount_fixation_two;
 
         //shit I need to make that second fixation a checkbox
-        if($secondFixation) {
+        if ($secondFixation) {
             $paper['total']['amount'] = $totalPagesOne + $totalPagesTwo;
-        }
-        else {
+        } else {
             $paper['total']['amount'] = $totalPagesOne;
         }
 
@@ -216,8 +233,6 @@ class PrintConfigurator {
 
         $paper['total']['price'] = $paper['total']['amount'] * $paper[0]['paper_price'];
 
-
-
         $contact = [
             'invoice_data' => [
                 'gender' => $order['gender'],
@@ -228,27 +243,28 @@ class PrintConfigurator {
                 'zip' => $order['zip'],
                 'city' => $order['city'],
                 'email' => $order['email'],
-                'phone' => $order['phone']
-            ]
+                'phone' => $order['phone'],
+            ],
         ];
 
         $revisited_order = [
             'pages' => $pages,
             'paper' => $paper,
             'fixations' => $totalFixations,
-            'contact' => $contact
+            'contact' => $contact,
         ];
 
         return $revisited_order;
     }
 
-    public function setAddress() {
-        rex_set_session('address', $_POST );
+    public function setAddress()
+    {
+        rex_set_session('address', $_POST);
     }
 
-    public function setOrder() {
+    public function setOrder()
+    {
         //rex_set_session( 'order', serialize($_POST));
-        rex_set_session( 'order', $_POST);
+        rex_set_session('order', $_POST);
     }
-
 }
