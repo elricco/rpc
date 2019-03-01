@@ -4,3 +4,5 @@ rpc_config_general = Generelle Einstellungen
 rpc_orders = Bestellungen
 rpc_help = Hilfe
 rpc_orders_overview = Übersicht
+
+rpc_no_data_fetched = Konnte keine Daten holen
