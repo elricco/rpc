@@ -174,7 +174,11 @@ class PrintConfiguratorData
     protected function format_papers()
     {
         // Get Papers
-        $papers = getPapers();
+        try {
+            $papers = $this->getPapers();
+        } catch (rex_sql_exception $e) {
+            $papers = 'Couldn\'t get papers';
+        }
 
         // Define output of papers (for later)
         foreach ($papers as $key => $paper) {
@@ -201,7 +205,7 @@ class PrintConfiguratorData
     protected function format_fixations()
     {
         // Get Papers
-        $fixations = getFixations();
+        $fixations = $this->getFixations();
 
         // Define output of fixations (for later)
         foreach ($fixations as $key => $fixation) {
@@ -228,13 +232,13 @@ class PrintConfiguratorData
     protected function format_fixationsAdditions()
     {
         // Get Fixation Additions
-        $fixationsAdditions = getFixationsAdditions();
+        $fixationsAdditions = $this->getFixationsAdditions();
 
         // Define output of fixations (for later)
         foreach ($fixationsAdditions as $key => $addition) {
             $fixation_addition_radio_attributes[$addition['id']] = [
-        'price' => $addition['price'],
-    ];
+                'price' => $addition['price'],
+            ];
         }
     }
 
