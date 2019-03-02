@@ -57,10 +57,14 @@ const config = {
         },
     ],
 
+    'watchModules': {
+        'watchFiles': ['../modules/**/*.php']
+    },
+
     // Watch
     // watches for file changes and fires up related tasks
     'watch': [
-        {'copyModule': ['copyModule']}
+        {'watchModules': ['copyModule']}
     ]
 };
 
