@@ -39,7 +39,30 @@ if (empty('REX_LINK[1]')) {
     </aside>';
 
     echo '<h1>Print Configurator</h1>';
-    echo $sidebar;
+    echo '<div class="container">';
+    $yform = new rex_yform();
+    $yform->setDebug(true);
+    $yform->setObjectparams('real_field_names', 1);
+    $yform->setObjectparams('article_id', rex_article::getCurrentId());
+    $yform->setActionField('callback', array('PrintConfigurator::setOrder'));
+    $yform->setActionField('redirect', array('REX_LINK[1]'));
+
+    // open left area
+    $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
+    $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-8">'));
+
+    $yform->setValueField('html', array('html', 'HTML', '</div>'));
+    $yform->setValueField('fieldset', array('sidebar', '', 'col-12 col-md-4'));
+    $yform->setValueField('html', array('html', 'HTML', $sidebar));
+    $yform->setValueField('fieldset', array('sidebar', '', 'col-2', 'onlyclose'));
+    $yform->setValueField('html', array('html', 'HTML', '</div>'));
+    $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
+    $yform->setValueField('html', array('html', 'HTML', '<div class="col-12">'));
+    $yform->setValueField('submit', array('submit', 'Bestellung aufgeben'));
+    $yform->setValueField('html', array('html', 'HTML', '</div>'));
+    $yform->setValueField('html', array('html', 'HTML', '</div>'));
+    echo $yform->getForm();
+    echo '</div>';
 } else {
     echo 'Nope';
 }
