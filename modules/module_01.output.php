@@ -10,6 +10,7 @@ if (empty('REX_LINK[1]')) {
 
     $rpcData = new PrintConfiguratorData();
     $data = $rpcData->getData();
+    dump($data);
     $order_flat_charge = $data['dom_elements']['order_flat_charge'];
 
     $sidebar = '
