@@ -13,12 +13,14 @@ requireDir('./tasks', { recurse: true });
 const tasks = {};
 tasks.development = gulp.series(
     'copyModule',
+    'scripts',
     'watch'
 );
 tasks.production = gulp.series(
     // run tasks in parallel because production mode can be much slower
     gulp.parallel(
-        'copyModule'
+        'copyModule',
+        'scripts'
     )
 );
 

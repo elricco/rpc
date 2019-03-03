@@ -61,10 +61,19 @@ const config = {
         'watchFiles': ['../modules/**/*.php']
     },
 
+    // Scripts
+    'scripts': {
+        'sourceFiles': ['./assets/scripts/scripts.js'],
+        'destinationFolder': '../assets/js',
+        'watchFiles': ['./assets/scripts/**/*.js'],
+        'cleanFiles': ['../assets/js/*.{js,map}']
+    },
+
     // Watch
     // watches for file changes and fires up related tasks
     'watch': [
-        {'watchModules': ['copyModule']}
+        {'watchModules': ['copyModule']},
+        {'scripts': ['scripts']}
     ]
 };
 
