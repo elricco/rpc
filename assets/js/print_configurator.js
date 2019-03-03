@@ -1,7 +1,7 @@
 (function(){function r(e,n,t){function o(i,f){if(!n[i]){if(!e[i]){var c="function"==typeof require&&require;if(!f&&c)return c(i,!0);if(u)return u(i,!0);var a=new Error("Cannot find module '"+i+"'");throw a.code="MODULE_NOT_FOUND",a}var p=n[i]={exports:{}};e[i][0].call(p.exports,function(r){var n=e[i][1][r];return o(n||r)},p,p.exports,r,e,n,t)}return n[i].exports}for(var u="function"==typeof require&&require,i=0;i<t.length;i++)o(t[i]);return o}return r})()({1:[function(require,module,exports){
 "use strict";
 
-require('nouislider');
+var noUiSlider = require('nouislider');
 
 $(function () {
   function getBasics() {
@@ -10,8 +10,50 @@ $(function () {
     });
   }
 
+  function calculate_price() {} // set range slider for black and white pages
+
+
+  var slider_baw = document.getElementById('page_baw');
+  var $slider_baw = $('#page_baw');
+  var input_baw_id = $slider_baw.next('div').find('input').prop('id');
+  var input_baw = document.getElementById(input_baw_id);
+  noUiSlider.create(slider_baw, {
+    start: [$slider_baw.next('div').find('input').data('start')],
+    step: 1,
+    connect: [true, false],
+    range: {
+      'min': [$slider_baw.next('div').find('input').data('min')],
+      'max': [$slider_baw.next('div').find('input').data('max')]
+    }
+  }); // set update listener
+
+  slider_baw.noUiSlider.on('update', function (values, handle) {
+    input_baw.value = Number.parseFloat(values[handle]).toFixed(0); // convert number to no decimals
+
+    calculate_price();
+  }); // set range slider for coloured pages
+
+  var slider_clr = document.getElementById('page_clr');
+  var $slider_clr = $('#page_clr');
+  var input_clr_id = $slider_clr.next('div').find('input').prop('id');
+  var input_clr = document.getElementById(input_clr_id);
+  noUiSlider.create(slider_clr, {
+    start: [$slider_clr.next('div').find('input').data('start')],
+    step: 1,
+    connect: [true, false],
+    range: {
+      'min': [$slider_clr.next('div').find('input').data('min')],
+      'max': [$slider_clr.next('div').find('input').data('max')]
+    }
+  }); // set update listener
+
+  slider_clr.noUiSlider.on('update', function (values, handle) {
+    input_clr.value = Number.parseFloat(values[handle]).toFixed(0); // convert number to no decimals
+
+    calculate_price();
+  });
+
   function init_calculator() {
-    console.log('Initial');
     getBasics();
   }
 
