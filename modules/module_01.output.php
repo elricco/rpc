@@ -12,6 +12,8 @@ if (empty('REX_LINK[1]')) {
     $data = $rpcData->getData();
     dump($data);
     $order_flat_charge = $data['dom_elements']['order_flat_charge'];
+    $page_prices = $data['formatted_basics']['page_prices'];
+    dump($page_prices);
 
     $sidebar = '
     <aside class="price-sidebar">
@@ -51,6 +53,19 @@ if (empty('REX_LINK[1]')) {
     // open left area
     $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
     $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-8">'));
+
+    // paper and print area
+    $yform->setValueField('fieldset', array('paper_and_print', 'Papier &amp; Druck'));
+    foreach ($page_prices as $key => $page_price) {
+        $yform->setValueField('html', array('html', 'HTML', '<div class="slider" id="'.$key.'"></div>'));
+        $yform->setValueField('text', array(
+            $page_price['type'],
+            $page_price['name'],
+            $page_price['min'],
+            '',
+            '{"data-min":"'.$page_price['min'].'","data-max":"'.$page_price['max'].'","data-start":"'.$page_price['start'].'","data-price":"'.$page_price['price'].'","data-vat":"'.$page_price['vat'].'","disabled":"disabled"}',
+        ));
+    }
 
     $yform->setValueField('html', array('html', 'HTML', '</div>'));
     $yform->setValueField('fieldset', array('sidebar', '', 'col-12 col-md-4'));
