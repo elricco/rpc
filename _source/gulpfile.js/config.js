@@ -63,8 +63,9 @@ const config = {
 
     // Scripts
     'scripts': {
-        'sourceFiles': ['./assets/scripts/scripts.js'],
+        'sourceFiles': ['./assets/scripts/print_configurator.js'],
         'destinationFolder': '../assets/js',
+        'targetName': 'print_configurator.js',
         'watchFiles': ['./assets/scripts/**/*.js'],
         'cleanFiles': ['../assets/js/*.{js,map}']
     },
@@ -75,7 +76,7 @@ const config = {
         {
             'title': 'Scripts',
             'sourceFolder': '../assets/js',
-            'sourceFiles': ['*.js'],
+            'sourceFiles': ['*.{js,map}'],
             'destinationFolder': '../../../../../assets/addons/rpc/js'
         }
     ],

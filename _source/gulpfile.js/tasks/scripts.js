@@ -45,7 +45,7 @@ function bundle() {
             log(colors.bold(colors.red(err.name + ': ' + err.message)));
 
         })
-        .pipe(source('script.js'))
+        .pipe(source(config.scripts.targetName))
         .pipe(buffer())
         .pipe(sourcemaps.init({loadMaps: true}))
         .pipe(process.env.APP_ENV === 'production' ? uglify() : through())
