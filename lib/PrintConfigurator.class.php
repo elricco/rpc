@@ -17,10 +17,10 @@ class PrintConfigurator
         $rpc_data = new PrintConfiguratorData();
         $basics = $rpc_data->getData();
 
-        $page_price_baw = $data['page_baw'] * $basics['formatted_basics']['page_prices']['page_baw']['price'];
-        $page_price_clr = $data['page_clr'] * $basics['formatted_basics']['page_prices']['page_clr']['price'];
+        $page_price_baw = number_format(intval($data['page_baw']) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']), 2);
+        $page_price_clr = number_format(intval($data['page_clr']) * floatval($basics['formatted_basics']['page_prices']['page_clr']['price']), 2);
 
-        $this->total_price = $page_price_baw + $page_price_clr;
+        $this->total_price = number_format(floatval($page_price_baw) + floatval($page_price_clr), 2);
 
         //model output
         $prices['prices'] = [
@@ -36,6 +36,7 @@ class PrintConfigurator
      * @param $order
      *
      * @return array
+     *
      * @throws rex_sql_exception
      */
     public function calculate_price($order)
