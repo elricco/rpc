@@ -4,6 +4,13 @@
  */
 class PrintConfigurator
 {
+    public function calculate_price_for_dom($data)
+    {
+        $rpc_data = new PrintConfiguratorData();
+        $basics = $rpc_data->getData();
+
+        return 'yeah';
+    }
     /**
      * @param $order
      *
