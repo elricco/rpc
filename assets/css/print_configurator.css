@@ -1,0 +1,25 @@
+@import url(~nouislider/distribute/nouislider.min.css);
+.slider {
+  margin: 20px 15px; }
+
+form .control-label {
+  position: static;
+  width: auto;
+  height: auto;
+  padding: auto;
+  margin: auto;
+  overflow: auto;
+  clip: auto;
+  border: 0; }
+
+.price-sidebar {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 100px;
+  font-size: 0.85em; }
+
+.show-second-fixation,
+.hide-second-fixation {
+  cursor: pointer; }
+
+/*# sourceMappingURL=print_configurator.css.map */

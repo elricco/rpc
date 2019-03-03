@@ -85,12 +85,37 @@ const config = {
         'watchFiles': ['../assets/js/**/*.js']
     },
 
+    // Styles
+    'styles': {
+        'sourceFiles': ['./assets/styles/*.scss'],
+        'destinationFolder': '../assets/css',
+        'watchFiles': ['./assets/styles/**/*.scss'],
+        'cleanFiles': ['./app/assets/css/*.{css,map}']
+    },
+
+    // Copy
+    // copy assets from source to app
+    'copyStyle': [
+        {
+            'title': 'Styles',
+            'sourceFolder': '../assets/css',
+            'sourceFiles': ['*.{css,map}'],
+            'destinationFolder': '../../../../../assets/addons/rpc/css'
+        }
+    ],
+
+    'watchStyles': {
+        'watchFiles': ['../assets/css/**/*.css']
+    },
+
     // Watch
     // watches for file changes and fires up related tasks
     'watch': [
         {'watchModules': ['copyModule']},
         {'scripts': ['scripts']},
-        {'watchScripts': ['copyScript']}
+        {'watchScripts': ['copyScript']},
+        {'styles': ['styles']},
+        {'watchStyles': ['copyStyle']}
     ]
 };
 

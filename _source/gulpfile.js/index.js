@@ -15,6 +15,8 @@ tasks.development = gulp.series(
     'copyModule',
     'scripts',
     'copyScript',
+    'styles',
+    'copyStyle',
     'watch'
 );
 tasks.production = gulp.series(
