@@ -4,13 +4,34 @@
  */
 class PrintConfigurator
 {
+    protected $total_price = 0;
+
+    /**
+     * @param $data
+     *
+     * @return array
+     */
     public function calculate_price_for_dom($data)
     {
+        $prices = [];
         $rpc_data = new PrintConfiguratorData();
         $basics = $rpc_data->getData();
 
-        return 'yeah';
+        $page_price_baw = $data['page_baw'] * $basics['formatted_basics']['page_prices']['page_baw']['price'];
+        $page_price_clr = $data['page_clr'] * $basics['formatted_basics']['page_prices']['page_clr']['price'];
+
+        $this->total_price = $page_price_baw + $page_price_clr;
+
+        //model output
+        $prices['prices'] = [
+            'page_baw_price' => $page_price_baw,
+            'page_clr_price' => $page_price_clr,
+            'total_price' => $this->total_price,
+        ];
+
+        return $prices;
     }
+
     /**
      * @param $order
      *

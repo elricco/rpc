@@ -11,7 +11,30 @@ $(function () {
     }
 
     function calculate_price() {
+        let data;
 
+        //value of black and white pages
+        let $baw = $('[name="page_baw"]');
+        let $bawInputValue = $baw.val();
+
+        //value of coloured pages
+        let $clr = $('[name="page_clr"]');
+        let $clrInputValue = $clr.val();
+
+        //model data for call
+        data = {
+            page_baw: $bawInputValue,
+            page_clr: $clrInputValue
+        };
+
+        $.get(
+            'index.php?rex-api-call=PrintConfiguratorCalculatePrice', {
+                data: data
+            },
+            function (data) {
+                console.log(data);
+            }
+        );
     }
 
     // set range slider for black and white pages

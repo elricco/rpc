@@ -10,7 +10,25 @@ $(function () {
     });
   }
 
-  function calculate_price() {} // set range slider for black and white pages
+  function calculate_price() {
+    var data; //value of black and white pages
+
+    var $baw = $('[name="page_baw"]');
+    var $bawInputValue = $baw.val(); //value of coloured pages
+
+    var $clr = $('[name="page_clr"]');
+    var $clrInputValue = $clr.val(); //model data for call
+
+    data = {
+      page_baw: $bawInputValue,
+      page_clr: $clrInputValue
+    };
+    $.get('index.php?rex-api-call=PrintConfiguratorCalculatePrice', {
+      data: data
+    }, function (data) {
+      console.log(data);
+    });
+  } // set range slider for black and white pages
 
 
   var slider_baw = document.getElementById('page_baw');
