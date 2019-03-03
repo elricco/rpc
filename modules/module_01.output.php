@@ -10,10 +10,11 @@ if (empty('REX_LINK[1]')) {
 
     $rpcData = new PrintConfiguratorData();
     $data = $rpcData->getData();
-    dump($data);
     $order_flat_charge = $data['dom_elements']['order_flat_charge'];
     $page_prices = $data['formatted_basics']['page_prices'];
-    dump($page_prices);
+    //debug stuff
+    dump($data);
+    //dump($page_prices);
 
     $sidebar = '
     <aside class="price-sidebar">
@@ -41,7 +42,9 @@ if (empty('REX_LINK[1]')) {
         </div>
     </aside>';
 
+    echo '<div class="container"><div class="row"><div class="col-12">';
     echo '<h1>Print Configurator</h1>';
+    echo '</div></div></div>';
     echo '<div class="container">';
     $yform = new rex_yform();
     $yform->setDebug(true);
