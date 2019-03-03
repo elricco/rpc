@@ -129,7 +129,7 @@ class PrintConfiguratorData
                 $dom_elements['setup_flat_charge'] = '<div class="setup_flat_charge"><span>'.$basic['price_name'].'</span> <span id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</span></div>';
             } elseif ('page_baw' == $basic['price_type'] || 'page_clr' == $basic['price_type']) {
                 $dom_elements['sidebar_price'] .= '<span>'.$basic['price_name'].'</span> <span id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</span>';
-                $formatted_basics[$basic['price_type']] = [
+                $formatted_basics['paper_price'][$basic['price_type']] = [
                     'type' => $basic['price_type'],
                     'name' => $basic['price_name'],
                     'price' => $basic['price_rate'],
