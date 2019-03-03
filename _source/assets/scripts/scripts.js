@@ -11,6 +11,7 @@ $(function () {
     }
 
     function init_calculator() {
+        console.log('Initial');
         getBasics();
     }
 

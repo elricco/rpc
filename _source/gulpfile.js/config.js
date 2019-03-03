@@ -69,11 +69,27 @@ const config = {
         'cleanFiles': ['../assets/js/*.{js,map}']
     },
 
+    // Copy
+    // copy assets from source to app
+    'copyScript': [
+        {
+            'title': 'Scripts',
+            'sourceFolder': '../assets/js',
+            'sourceFiles': ['*.js'],
+            'destinationFolder': '../../../../../assets/addons/rpc/js'
+        }
+    ],
+
+    'watchScripts': {
+        'watchFiles': ['../assets/js/**/*.js']
+    },
+
     // Watch
     // watches for file changes and fires up related tasks
     'watch': [
         {'watchModules': ['copyModule']},
-        {'scripts': ['scripts']}
+        {'scripts': ['scripts']},
+        {'watchScripts': ['copyScript']}
     ]
 };
 
