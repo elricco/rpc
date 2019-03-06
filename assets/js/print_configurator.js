@@ -23,7 +23,9 @@ $(function () {
     }, function (data) {
       console.log(data);
     }).done(function (data) {
-      console.log(data);
+      console.log(data); // send paper and print
+
+      $('.order-paper').html(data['dom_elements']['order-paper']);
     }).fail(function () {});
   } // set range slider for black and white pages
 
@@ -40,16 +42,6 @@ $(function () {
       'min': [$slider_baw.next('div').find('input').data('min')],
       'max': [$slider_baw.next('div').find('input').data('max')]
     }
-  }); // set update listener
-
-  slider_baw.noUiSlider.on('update', function (values, handle) {
-    input_baw.value = Number.parseFloat(values[handle]).toFixed(0); // convert number to no decimals
-
-    calculate_price();
-  });
-  input_baw.addEventListener('change', function () {
-    slider_baw.noUiSlider.set(this.value);
-    calculate_price();
   }); // set range slider for coloured pages
 
   var slider_clr = document.getElementById('page_clr');
@@ -64,6 +56,28 @@ $(function () {
       'min': [$slider_clr.next('div').find('input').data('min')],
       'max': [$slider_clr.next('div').find('input').data('max')]
     }
+  }); // set update listener
+
+  slider_baw.noUiSlider.on('update', function (values, handle) {
+    input_baw.value = Number.parseFloat(values[handle]).toFixed(0); // convert number to no decimals
+
+    slider_clr.noUiSlider.updateOptions({
+      range: {
+        'min': [$slider_clr.next('div').find('input').data('min')],
+        'max': [Number.parseInt(input_baw.value)]
+      }
+    });
+    calculate_price();
+  });
+  input_baw.addEventListener('change', function () {
+    slider_baw.noUiSlider.set(this.value);
+    slider_clr.noUiSlider.updateOptions({
+      range: {
+        'min': [$slider_clr.next('div').find('input').data('min')],
+        'max': [Number.parseInt(input_baw.value)]
+      }
+    });
+    calculate_price();
   }); // set update listener
 
   slider_clr.noUiSlider.on('update', function (values, handle) {
