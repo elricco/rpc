@@ -5,6 +5,31 @@
 class PrintConfigurator
 {
     protected $total_price = 0;
+    protected $page_price_baw = 0;
+    protected $page_price_clr = 0;
+
+    protected $page_name_baw = '';
+    protected $page_name_clr = '';
+
+    /**
+     * @param $reference
+     * @param $amount
+     * @param $price
+     * @param $currency
+     * @param $label
+     *
+     * @return string
+     */
+    private function generateSidebarDom($reference, $amount, $price, $label = '', $currency = '€')
+    {
+        return '<div id="order-'.$reference.'" class="border-bottom">'.
+               '    <div class="row py-1">'.
+               '        <div class="col-6">'.$label.'</div>'.
+               '        <div class="col-2"><small>x'.$amount.'</small></div>'.
+               '        <div class="col-4 text-right">'.number_format($price, 2, ',', '.').$currency.'</div>'.
+               '    </div>'.
+               '</div>';
+    }
 
     /**
      * @param $data
@@ -21,16 +46,24 @@ class PrintConfigurator
         //maybe add a switch to config page if colored pages should be substracted?
         $baw_pages = intval($data['page_baw']) - intval($data['page_clr']);
 
-        $page_price_baw = number_format(intval($baw_pages) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']), 2);
-        $page_price_clr = number_format(intval($data['page_clr']) * floatval($basics['formatted_basics']['page_prices']['page_clr']['price']), 2);
+        $this->page_price_baw = number_format(intval($baw_pages) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']), 2);
+        $this->page_price_clr = number_format(intval($data['page_clr']) * floatval($basics['formatted_basics']['page_prices']['page_clr']['price']), 2);
 
-        $this->total_price = number_format(floatval($page_price_baw) + floatval($page_price_clr), 2);
+        $this->total_price = number_format(floatval($this->page_price_baw) + floatval($this->page_price_clr), 2);
 
         //model output
         $prices['prices'] = [
-            'page_baw_price' => $page_price_baw,
-            'page_clr_price' => $page_price_clr,
+            'page_baw_price' => $this->page_price_baw,
+            'page_clr_price' => $this->page_price_clr,
             'total_price' => $this->total_price,
+        ];
+
+        $this->page_name_baw = $basics['formatted_basics']['page_prices']['page_baw']['name'];
+        $this->page_name_clr = $basics['formatted_basics']['page_prices']['page_clr']['name'];
+
+        //model output
+        $prices['dom_elements'] = [
+            'order-paper' => $this->generateSidebarDom('paper_baw', $data['page_baw'], $this->page_price_baw, $this->page_name_baw).$this->generateSidebarDom('paper_clr', $data['page_clr'], $this->page_price_clr, $this->page_name_clr),
         ];
 
         return $prices;
@@ -40,8 +73,6 @@ class PrintConfigurator
      * @param $order
      *
      * @return array
-     *
-     * @throws rex_sql_exception
      */
     public function calculate_price($order)
     {
