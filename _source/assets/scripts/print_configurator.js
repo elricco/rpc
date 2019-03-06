@@ -13,19 +13,12 @@ $(function () {
     function calculate_price() {
         let data;
 
-        //value of black and white pages
-        let $baw = $('[name="page_baw"]');
-        let $bawInputValue = $baw.val();
-
-        //value of coloured pages
-        let $clr = $('[name="page_clr"]');
-        let $clrInputValue = $clr.val();
-
-        //model data for call
-        data = {
-            page_baw: $bawInputValue,
-            page_clr: $clrInputValue
-        };
+        //serializeArray and convert to object
+        //https://stackoverflow.com/questions/2276463/how-can-i-get-form-data-with-javascript-jquery
+        data = $('#formular').serializeArray().reduce(function(obj, item) {
+            obj[item.name] = item.value;
+            return obj;
+        }, {});
 
         $.get(
             'index.php?rex-api-call=PrintConfiguratorCalculatePrice', {
@@ -56,6 +49,9 @@ $(function () {
         input_baw.value = Number.parseFloat(values[handle]).toFixed(0); // convert number to no decimals
         calculate_price();
     });
+    input_baw.addEventListener('change', function () {
+        slider_baw.noUiSlider.set(this.value);
+    });
 
     // set range slider for coloured pages
     let slider_clr = document.getElementById('page_clr');
@@ -75,6 +71,9 @@ $(function () {
     slider_clr.noUiSlider.on('update', function( values, handle ) {
         input_clr.value = Number.parseFloat(values[handle]).toFixed(0); // convert number to no decimals
         calculate_price();
+    });
+    input_clr.addEventListener('change', function () {
+        slider_clr.noUiSlider.set(this.value);
     });
 
     function init_calculator() {
