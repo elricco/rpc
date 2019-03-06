@@ -17,7 +17,11 @@ class PrintConfigurator
         $rpc_data = new PrintConfiguratorData();
         $basics = $rpc_data->getData();
 
-        $page_price_baw = number_format(intval($data['page_baw']) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']), 2);
+        //substract colored pages from total pages
+        //maybe add a switch to config page if colored pages should be substracted?
+        $baw_pages = intval($data['page_baw']) - intval($data['page_clr']);
+
+        $page_price_baw = number_format(intval($baw_pages) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']), 2);
         $page_price_clr = number_format(intval($data['page_clr']) * floatval($basics['formatted_basics']['page_prices']['page_clr']['price']), 2);
 
         $this->total_price = number_format(floatval($page_price_baw) + floatval($page_price_clr), 2);
