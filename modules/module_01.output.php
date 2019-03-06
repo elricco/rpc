@@ -66,7 +66,7 @@ if (empty('REX_LINK[1]')) {
             $page_price['name'],
             $page_price['min'],
             '',
-            '{"data-min":"'.$page_price['min'].'","data-max":"'.$page_price['max'].'","data-start":"'.$page_price['start'].'","data-price":"'.$page_price['price'].'","data-vat":"'.$page_price['vat'].'","disabled":"disabled"}',
+            '{"data-min":"'.$page_price['min'].'","data-max":"'.$page_price['max'].'","data-start":"'.$page_price['start'].'","data-price":"'.$page_price['price'].'","data-vat":"'.$page_price['vat'].'"}',
         ));
     }
 
