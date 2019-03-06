@@ -22,7 +22,9 @@ $(function () {
       data: data
     }, function (data) {
       console.log(data);
-    });
+    }).done(function (data) {
+      console.log(data);
+    }).fail(function () {});
   } // set range slider for black and white pages
 
 
@@ -47,6 +49,7 @@ $(function () {
   });
   input_baw.addEventListener('change', function () {
     slider_baw.noUiSlider.set(this.value);
+    calculate_price();
   }); // set range slider for coloured pages
 
   var slider_clr = document.getElementById('page_clr');
@@ -70,6 +73,7 @@ $(function () {
   });
   input_clr.addEventListener('change', function () {
     slider_clr.noUiSlider.set(this.value);
+    calculate_price();
   });
 
   function init_calculator() {
