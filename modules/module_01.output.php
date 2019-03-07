@@ -52,6 +52,7 @@ if (empty('REX_LINK[1]')) {
     $yform->setObjectparams('article_id', rex_article::getCurrentId());
     $yform->setActionField('callback', array('PrintConfigurator::setOrder'));
     $yform->setActionField('redirect', array('REX_LINK[1]'));
+    $yform->setObjectparams('form_name', 'config_form');
 
     // open left area
     $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));

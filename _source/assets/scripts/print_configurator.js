@@ -15,7 +15,7 @@ $(function () {
 
         //serializeArray and convert to object
         //https://stackoverflow.com/questions/2276463/how-can-i-get-form-data-with-javascript-jquery
-        data = $('#formular').serializeArray().reduce(function(obj, item) {
+        data = $('#config_form').serializeArray().reduce(function(obj, item) {
             obj[item.name] = item.value;
             return obj;
         }, {});
