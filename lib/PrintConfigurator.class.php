@@ -26,7 +26,7 @@ class PrintConfigurator
                '    <div class="row py-1">'.
                '        <div class="col-6">'.$label.'</div>'.
                '        <div class="col-2"><small>x'.$amount.'</small></div>'.
-               '        <div class="col-4 text-right">'.number_format($price, 2, ',', '.').$currency.'</div>'.
+               '        <div class="col-4 text-right">'.number_format($price, 2, ',', '.').' '.$currency.'</div>'.
                '    </div>'.
                '</div>';
     }
