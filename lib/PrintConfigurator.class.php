@@ -67,6 +67,19 @@ class PrintConfigurator
             'order-paper' => $this->generateSidebarDom('paper_baw', $data['page_baw'], $this->page_price_baw, $this->page_name_baw).$this->generateSidebarDom('paper_clr', $data['page_clr'], $this->page_price_clr, $this->page_name_clr),
         ];
 
+        // @ToDo: Remove this before release
+        //get REDAXO config file
+        $configFile = rex_path::coreData('config.yml');
+        $config = rex_file::getConfig($configFile);
+
+        //when debug is set and true, include function(s)
+        if (isset($config['debug']['enabled']) && true === $config['debug']['enabled']) {
+            $prices['GET'] = [
+                'data' => $data,
+            ];
+        }
+        // @ToDo: Remove this before release - END
+
         return $prices;
     }
 
