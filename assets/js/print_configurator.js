@@ -88,6 +88,14 @@ $(function () {
   input_clr.addEventListener('change', function () {
     slider_clr.noUiSlider.set(this.value);
     calculate_price();
+  }); // set update listener
+
+  $('[name*="one_or_double-sided"]').on('click', function () {
+    $.each($('[name*="one_or_double-sided"]'), function (index, value) {
+      if ($(this).prop('checked')) {
+        calculate_price();
+      }
+    });
   });
 
   function init_calculator() {

@@ -11,6 +11,9 @@ class PrintConfigurator
     protected $page_name_baw = '';
     protected $page_name_clr = '';
 
+    protected $total_pages = 0;
+    protected $one_or_double_sided = 0;
+
     /**
      * @param $reference
      * @param $amount
@@ -32,6 +35,16 @@ class PrintConfigurator
     }
 
     /**
+     * @param $number
+     *
+     * @return int
+     */
+    public function isOdd($number)
+    {
+        return $number % 2;
+    }
+
+    /**
      * @param $data
      *
      * @return array
@@ -46,6 +59,7 @@ class PrintConfigurator
         //maybe add a switch to config page if colored pages should be substracted?
         //$baw_pages = intval($data['page_baw']) - intval($data['page_clr']);
         $baw_pages = intval($data['page_baw']);
+        $this->total_pages = intval($data['page_baw']);
 
         $this->page_price_baw = number_format(intval($baw_pages) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']), 2);
         $this->page_price_clr = number_format(intval($data['page_clr']) * floatval($basics['formatted_basics']['page_prices']['page_clr']['price']), 2);
@@ -59,6 +73,19 @@ class PrintConfigurator
             'total_price' => $this->total_price,
         ];
 
+        //re-calculate prices if double-sided prints is checked
+        $this->one_or_double_sided = $data['one_or_double-sided'];
+
+        if (1 == $this->one_or_double_sided) {
+            $this->total_pages = round(round($this->total_pages / 2) * 2) / 2;
+            if (1 == $this->isOdd($this->total_pages)) {
+                ++$this->total_pages;
+            }
+            $this->page_price_baw = number_format(intval($this->total_pages) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']), 2);
+            $prices['prices']['page_baw_price'] = $this->page_price_baw;
+        }
+
+        // dom output needs to be modeled latest
         $this->page_name_baw = $basics['formatted_basics']['page_prices']['page_baw']['name'];
         $this->page_name_clr = $basics['formatted_basics']['page_prices']['page_clr']['name'];
 

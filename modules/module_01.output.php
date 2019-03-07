@@ -71,6 +71,8 @@ if (empty('REX_LINK[1]')) {
         ));
     }
 
+    $yform->setValueField('choice', ['one_or_double-sided', 'Druckverfahren', '{"Einseitig":"0","Beidseitig":"1"}', 1, 0, '0']);
+
     $yform->setValueField('html', array('html', 'HTML', '</div>'));
     $yform->setValueField('fieldset', array('sidebar', '', 'col-12 col-md-4'));
     $yform->setValueField('html', array('html', 'HTML', $sidebar));
