@@ -44,7 +44,8 @@ class PrintConfigurator
 
         //substract colored pages from total pages
         //maybe add a switch to config page if colored pages should be substracted?
-        $baw_pages = intval($data['page_baw']) - intval($data['page_clr']);
+        //$baw_pages = intval($data['page_baw']) - intval($data['page_clr']);
+        $baw_pages = intval($data['page_baw']);
 
         $this->page_price_baw = number_format(intval($baw_pages) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']), 2);
         $this->page_price_clr = number_format(intval($data['page_clr']) * floatval($basics['formatted_basics']['page_prices']['page_clr']['price']), 2);
