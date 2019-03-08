@@ -166,6 +166,7 @@ class PrintConfiguratorData
             'basics' => $basics,
             'formatted_basics' => $formatted_basics,
             'dom_elements' => $dom_elements,
+            'papers' => $this->format_papers(),
         ];
 
         return $data;
@@ -177,9 +178,12 @@ class PrintConfiguratorData
         try {
             $papers = $this->getPapers();
         } catch (rex_sql_exception $e) {
-            $papers = 'Couldn\'t get papers';
+            $papers = 'Couldn\'t get papers: '.$e;
         }
 
+        $paper_radio_attributes = [];
+        $paper_radio_attributes['unformatted'] = [$papers];
+        $paper_default = $papers['0']['0']['id'];
         // Define output of papers (for later)
         foreach ($papers as $key => $paper) {
             if (!isset($paper_default) && empty($paper_default)) {
@@ -189,17 +193,37 @@ class PrintConfiguratorData
                     ',',
                     '<p>',
                     '</p>',
-                ), array('.', '', ''), $paper['paper_description']).'</small>='.$paper['id'];
-            if ($key < (count($papers) - 1)) {
-                $paper_radio_options .= ',';
-            }
-            $paper_radio_attributes[$paper['id']] = [
+                ), array('.', '', ''), $paper['paper_description']).'</small>';
+            $paper_radio_attributes['formatted'][$paper['id']] = [
+                'id' => $paper['id'],
                 'price' => $paper['paper_price'],
                 'vat' => $paper['vat_rate'],
                 'fixations' => $paper['paper_fixation'],
                 'strength' => $paper['paper_strength'],
+                'label' => $paper_radio_options,
             ];
         }
+
+        //build json
+        $paper_json = '';
+        foreach ($papers as $key => $paper) {
+            $label = $paper['paper_name'].'<br><small>'.str_replace(array(
+                    ',',
+                    '<p>',
+                    '</p>',
+                ), array('.', '', ''), $paper['paper_description']).'</small>';
+            $paper_json .= '"'.$label.'":"'.$paper['id'].'"';
+            if ($key < (count($papers) - 1)) {
+                $paper_json .= ',';
+            }
+        }
+
+        $paper_radio_attributes['paper_default'] = $paper_default;
+        $paper_radio_attributes['paper_json'] = $paper_json;
+
+        $data = $paper_radio_attributes;
+
+        return $data;
     }
 
     protected function format_fixations()
