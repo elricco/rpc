@@ -1,6 +1,13 @@
 const noUiSlider = require ('nouislider');
 
 $(function () {
+    function replaceTextWithHtml(selector) {
+        $.each(selector, function(index, value) {
+            let txtToHtml = $(value).text();
+            $(this).html(txtToHtml);
+        });
+    }
+
     function getBasics() {
         $.get(
             'index.php?rex-api-call=PrintConfiguratorGetData',
@@ -109,6 +116,7 @@ $(function () {
 
     function init_calculator() {
         getBasics();
+        replaceTextWithHtml($('[name*="paper_options"]').next());
     }
 
     init_calculator();
