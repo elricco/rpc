@@ -73,6 +73,8 @@ if (empty('REX_LINK[1]')) {
 
     $yform->setValueField('choice', ['one_or_double-sided', 'Druckverfahren', '{"Einseitig":"0","Beidseitig":"1"}', 1, 0, '0']);
 
+    $yform->setValueField('choice', ['data_check', 'Datencheck', '{'.$data['data_check']['data_check_json'].'}', 1, 0, $data['data_check']['data_check_default']]);
+
     $yform->setValueField('choice', ['paper_options', 'Papiere', '{'.$data['papers']['paper_json'].'}', 1, 0, $data['papers']['paper_default']]);
 
     $yform->setValueField('html', array('html', 'HTML', '</div>'));
