@@ -184,6 +184,7 @@ class PrintConfiguratorData
         $paper_radio_attributes = [];
         $paper_radio_attributes['unformatted'] = [$papers];
         $paper_default = $papers['0']['0']['id'];
+        $paper_radio_options = '';
         // Define output of papers (for later)
         foreach ($papers as $key => $paper) {
             if (!isset($paper_default) && empty($paper_default)) {
