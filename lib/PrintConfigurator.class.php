@@ -17,6 +17,9 @@ class PrintConfigurator
     protected $data_check = 0;
     protected $data_check_price = 0;
 
+    protected $paper_option = 0;
+    protected $paper_option_price = 0;
+
     /**
      * @param $reference
      * @param $amount
@@ -75,12 +78,19 @@ class PrintConfigurator
 
         $this->total_price = number_format(floatval($this->total_price) + floatval($this->data_check_price), 2);
 
+        //calculate paper options price
+        $this->paper_option = $data['paper_options'];
+        $this->paper_option_price = number_format(intval($this->total_pages) * floatval($basics['papers']['formatted'][$this->paper_option]['price']), 2);
+
+        $this->total_price = number_format(floatval($this->total_price) + floatval($this->paper_option_price), 2);
+
         //model output
         $prices['prices'] = [
             'page_baw_price' => $this->page_price_baw,
             'page_clr_price' => $this->page_price_clr,
-            'total_price' => $this->total_price,
             'data_check_price' => $this->data_check_price,
+            'paper_price' => $this->paper_option_price,
+            'total_price' => $this->total_price,
         ];
 
         //re-calculate prices if double-sided prints is checked
