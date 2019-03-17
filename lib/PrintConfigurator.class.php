@@ -111,9 +111,13 @@ class PrintConfigurator
 
         }
 
-        $this->total_price = number_format(floatval($this->page_price_baw) + floatval($this->page_price_clr), 2);
-        $this->total_price = number_format(floatval($this->total_price) + floatval($this->data_check_price), 2);
-        $this->total_price = number_format(floatval($this->total_price) + floatval($this->paper_option_price), 2);
+        $this->total_price = number_format(
+            floatval($this->page_price_baw) +
+            floatval($this->page_price_clr) +
+            floatval($this->data_check_price) +
+            floatval($this->paper_option_price),
+            2
+        );
         $prices['prices']['total_price'] = $this->total_price;
 
 
