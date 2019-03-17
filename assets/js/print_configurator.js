@@ -97,19 +97,9 @@ $(function () {
     calculate_price();
   }); // set update listener
 
-  $('[name*="one_or_double-sided"]').on('click', function () {
-    $.each($('[name*="one_or_double-sided"]'), function (index, value) {
-      if ($(this).prop('checked')) {
-        calculate_price();
-      }
-    });
-  }); // set update listener
-
-  $('[name*="data_check"]').on('click', function () {
-    $.each($('[name*="data_check"]'), function (index, value) {
-      if ($(this).prop('checked')) {
-        calculate_price();
-      }
+  $('input:radio').on('click', function () {
+    $.each($('input:radio:checked'), function (index, value) {
+      calculate_price();
     });
   });
 
