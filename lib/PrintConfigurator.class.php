@@ -76,9 +76,11 @@ class PrintConfigurator
         $baw_pages = intval($data['page_baw']);
         $this->total_pages = intval($data['page_baw']);
 
+        //calculate total / baw pages
         $this->page_price_baw = number_format(intval($baw_pages) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']), 2);
         $prices['prices']['page_baw_price'] = $this->page_price_baw;
 
+        //calculate coloured pages
         $this->page_price_clr = number_format(intval($data['page_clr']) * floatval($basics['formatted_basics']['page_prices']['page_clr']['price']), 2);
         $prices['prices']['page_clr_price'] = $this->page_price_clr;
 
@@ -91,7 +93,6 @@ class PrintConfigurator
         $this->paper_option = $data['paper_options'];
         $this->paper_option_price = number_format(intval($this->total_pages) * floatval($basics['papers']['formatted'][$this->paper_option]['price']), 2);
         $prices['prices']['paper_price'] = $this->paper_option_price;
-
 
         //re-calculate prices if double-sided prints is checked
         $this->one_or_double_sided = $data['one_or_double-sided'];
