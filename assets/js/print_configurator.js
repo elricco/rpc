@@ -103,6 +103,14 @@ $(function () {
         calculate_price();
       }
     });
+  }); // set update listener
+
+  $('[name*="data_check"]').on('click', function () {
+    $.each($('[name*="data_check"]'), function (index, value) {
+      if ($(this).prop('checked')) {
+        calculate_price();
+      }
+    });
   });
 
   function init_calculator() {

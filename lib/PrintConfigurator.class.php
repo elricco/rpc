@@ -14,6 +14,9 @@ class PrintConfigurator
     protected $total_pages = 0;
     protected $one_or_double_sided = 0;
 
+    protected $data_check = 0;
+    protected $data_check_price = 0;
+
     /**
      * @param $reference
      * @param $amount
@@ -66,11 +69,18 @@ class PrintConfigurator
 
         $this->total_price = number_format(floatval($this->page_price_baw) + floatval($this->page_price_clr), 2);
 
+        //calculate data check price
+        $this->data_check = $data['data_check'];
+        $this->data_check_price = $basics['data_check']['formatted'][$this->data_check]['price'];
+
+        $this->total_price = number_format(floatval($this->total_price) + floatval($this->data_check_price), 2);
+
         //model output
         $prices['prices'] = [
             'page_baw_price' => $this->page_price_baw,
             'page_clr_price' => $this->page_price_clr,
             'total_price' => $this->total_price,
+            'data_check_price' => $this->data_check_price,
         ];
 
         //re-calculate prices if double-sided prints is checked
