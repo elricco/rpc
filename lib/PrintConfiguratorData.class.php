@@ -119,9 +119,22 @@ class PrintConfiguratorData
      */
     protected function format_basics()
     {
-        $basics = $this->getBasics();
+        $basics = self::getBasics();
         $formatted_basics = [];
         $dom_elements = [];
+        $data_check = [];
+        $data_check_radio_options = '';
+        $count = 0;
+
+        foreach ($basics as $key => $basic) {
+            if ('data_check_charge' == $basic['price_type'] && 0 == $count) {
+                $data_check['data_check_default'] = $basic['id'];
+                ++$count;
+            }
+        }
+
+        // @ToDo: Get the already set defaults
+
         foreach ($basics as $key => $basic) {
             if ('order_flat_charge' == $basic['price_type']) {
                 $dom_elements['order_flat_charge'] = '<div class="order-flat-charge border-bottom"><div class="row py-1"><div class="col">'.$basic['price_name'].'</div> <div class="col text-right" id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</div></div></div>';
@@ -148,18 +161,21 @@ class PrintConfiguratorData
                 ];
             } elseif ('data_check_charge' == $basic['price_type']) {
                 //$sidebar_price .= '<span>'.$basic['price_name'].'</span> <span id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</span>';
-                if (!isset($data_check_default) && empty($data_check_default)) {
-                    $data_check_default = $basic['id'];
+                if (!isset($data_check['data_check_default']) && empty($data_check['data_check_default'])) {
+                    $data_check['data_check_default'] = $basic['id'];
                 }
-                $data_check_radio_options .= $basic['price_name'].'='.$basic['id'];
+                $data_check_radio_options .= '"'.$basic['price_name'].'":"'.$basic['id'].'"';
                 if ($key < (count($basics) - 1)) {
                     $data_check_radio_options .= ',';
                 }
-                $data_check_radio_attributes[$basic['id']] = [
+                $data_check['formatted'][$basic['id']] = [
+                    'id' => $basic['id'],
                     'price' => $basic['price_rate'],
                     'vat' => $basic['vat_rate'],
+                    'label' => $basic['price_name'],
                 ];
             }
+            $data_check['data_check_json'] = $data_check_radio_options;
         }
 
         $data = [
@@ -167,6 +183,7 @@ class PrintConfiguratorData
             'formatted_basics' => $formatted_basics,
             'dom_elements' => $dom_elements,
             'papers' => $this->format_papers(),
+            'data_check' => $data_check,
         ];
 
         return $data;
