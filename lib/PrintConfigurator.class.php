@@ -61,29 +61,6 @@ class PrintConfigurator
         $rpc_data = new PrintConfiguratorData();
         $basics = $rpc_data->getData();
 
-        //substract colored pages from total pages
-        //maybe add a switch to config page if colored pages should be substracted?
-        //$baw_pages = intval($data['page_baw']) - intval($data['page_clr']);
-        $baw_pages = intval($data['page_baw']);
-        $this->total_pages = intval($data['page_baw']);
-
-        $this->page_price_baw = number_format(intval($baw_pages) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']), 2);
-        $this->page_price_clr = number_format(intval($data['page_clr']) * floatval($basics['formatted_basics']['page_prices']['page_clr']['price']), 2);
-
-        $this->total_price = number_format(floatval($this->page_price_baw) + floatval($this->page_price_clr), 2);
-
-        //calculate data check price
-        $this->data_check = $data['data_check'];
-        $this->data_check_price = $basics['data_check']['formatted'][$this->data_check]['price'];
-
-        $this->total_price = number_format(floatval($this->total_price) + floatval($this->data_check_price), 2);
-
-        //calculate paper options price
-        $this->paper_option = $data['paper_options'];
-        $this->paper_option_price = number_format(intval($this->total_pages) * floatval($basics['papers']['formatted'][$this->paper_option]['price']), 2);
-
-        $this->total_price = number_format(floatval($this->total_price) + floatval($this->paper_option_price), 2);
-
         //model output
         $prices['prices'] = [
             'page_baw_price' => $this->page_price_baw,
@@ -92,6 +69,29 @@ class PrintConfigurator
             'paper_price' => $this->paper_option_price,
             'total_price' => $this->total_price,
         ];
+
+        //substract colored pages from total pages
+        //maybe add a switch to config page if colored pages should be substracted?
+        //$baw_pages = intval($data['page_baw']) - intval($data['page_clr']);
+        $baw_pages = intval($data['page_baw']);
+        $this->total_pages = intval($data['page_baw']);
+
+        $this->page_price_baw = number_format(intval($baw_pages) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']), 2);
+        $prices['prices']['page_baw_price'] = $this->page_price_baw;
+
+        $this->page_price_clr = number_format(intval($data['page_clr']) * floatval($basics['formatted_basics']['page_prices']['page_clr']['price']), 2);
+        $prices['prices']['page_clr_price'] = $this->page_price_clr;
+
+        //calculate data check price
+        $this->data_check = $data['data_check'];
+        $this->data_check_price = $basics['data_check']['formatted'][$this->data_check]['price'];
+        $prices['prices']['data_check_price'] = $this->data_check_price;
+
+        //calculate paper options price
+        $this->paper_option = $data['paper_options'];
+        $this->paper_option_price = number_format(intval($this->total_pages) * floatval($basics['papers']['formatted'][$this->paper_option]['price']), 2);
+        $prices['prices']['paper_price'] = $this->paper_option_price;
+
 
         //re-calculate prices if double-sided prints is checked
         $this->one_or_double_sided = $data['one_or_double-sided'];
@@ -102,12 +102,19 @@ class PrintConfigurator
                 ++$this->total_pages;
             }
             $this->page_price_baw = number_format(intval($this->total_pages) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']), 2);
+            $this->paper_option_price = number_format(intval($this->total_pages) * floatval($basics['papers']['formatted'][$this->paper_option]['price']), 2);
+            $prices['prices']['paper_price'] = $this->paper_option_price;
+
             $this->total_price = number_format(floatval($this->total_price) - floatval($prices['prices']['page_baw_price']), 2);
             $prices['prices']['page_baw_price'] = $this->page_price_baw;
 
-            $this->total_price = number_format(floatval($this->total_price) + floatval($this->page_price_baw), 2);
-            $prices['prices']['total_price'] = $this->total_price;
         }
+
+        $this->total_price = number_format(floatval($this->page_price_baw) + floatval($this->page_price_clr), 2);
+        $this->total_price = number_format(floatval($this->total_price) + floatval($this->data_check_price), 2);
+        $this->total_price = number_format(floatval($this->total_price) + floatval($this->paper_option_price), 2);
+        $prices['prices']['total_price'] = $this->total_price;
+
 
         // dom output needs to be modeled latest
         $this->page_name_baw = $basics['formatted_basics']['page_prices']['page_baw']['name'];
