@@ -92,7 +92,11 @@ class PrintConfigurator
                 ++$this->total_pages;
             }
             $this->page_price_baw = number_format(intval($this->total_pages) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']), 2);
+            $this->total_price = number_format(floatval($this->total_price) - floatval($prices['prices']['page_baw_price']), 2);
             $prices['prices']['page_baw_price'] = $this->page_price_baw;
+
+            $this->total_price = number_format(floatval($this->total_price) + floatval($this->page_price_baw), 2);
+            $prices['prices']['total_price'] = $this->total_price;
         }
 
         // dom output needs to be modeled latest
