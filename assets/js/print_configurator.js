@@ -101,6 +101,10 @@ $(function () {
     $.each($('input:radio:checked'), function (index, value) {
       calculate_price();
     });
+  }); // set update listener
+
+  $('input[name*="fixation"]').on('change', function () {
+    calculate_price();
   });
 
   function init_calculator() {

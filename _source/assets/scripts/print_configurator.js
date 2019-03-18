@@ -112,6 +112,11 @@ $(function () {
         });
     });
 
+    // set update listener
+    $('input[name*="fixation"]').on('change', function () {
+        calculate_price();
+    });
+
     function init_calculator() {
         getBasics();
         replaceTextWithHtml($('[name*="paper_options"]').next());
