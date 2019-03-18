@@ -7,6 +7,7 @@ class PrintConfigurator
     protected $total_price = 0;
     protected $page_price_baw = 0;
     protected $page_price_clr = 0;
+    protected $page_order_price = 0;
 
     protected $page_name_baw = '';
     protected $page_name_clr = '';
@@ -65,6 +66,7 @@ class PrintConfigurator
         $prices['prices'] = [
             'page_baw_price' => $this->page_price_baw,
             'page_clr_price' => $this->page_price_clr,
+            'page_order_price' => $this->page_order_price,
             'data_check_price' => $this->data_check_price,
             'paper_price' => $this->paper_option_price,
             'total_price' => $this->total_price,
@@ -79,6 +81,10 @@ class PrintConfigurator
         //calculate total / baw pages
         $this->page_price_baw = number_format(intval($baw_pages) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']), 2);
         $prices['prices']['page_baw_price'] = $this->page_price_baw;
+
+        //calculate baw pages with order_charge
+        $this->page_order_price = number_format(floatval($this->page_price_baw) + floatval($basics['formatted_basics']['order_flat_charge']['price']), 2);
+        $prices['prices']['page_order_price'] = $this->page_order_price;
 
         //calculate coloured pages
         $this->page_price_clr = number_format(intval($data['page_clr']) * floatval($basics['formatted_basics']['page_prices']['page_clr']['price']), 2);
@@ -106,6 +112,10 @@ class PrintConfigurator
             $this->paper_option_price = number_format(intval($this->total_pages) * floatval($basics['papers']['formatted'][$this->paper_option]['price']), 2);
             $prices['prices']['paper_price'] = $this->paper_option_price;
 
+            //calculate baw pages with order_charge
+            $this->page_order_price = number_format(floatval($this->page_price_baw) + floatval($basics['formatted_basics']['order_flat_charge']['price']), 2);
+            $prices['prices']['page_order_price'] = $this->page_order_price;
+
             $this->total_price = number_format(floatval($this->total_price) - floatval($prices['prices']['page_baw_price']), 2);
             $prices['prices']['page_baw_price'] = $this->page_price_baw;
         }
@@ -125,7 +135,7 @@ class PrintConfigurator
 
         //model output
         $prices['dom_elements'] = [
-            'order-paper' => $this->generateSidebarDom('paper_baw', $data['page_baw'], $this->page_price_baw, $this->page_name_baw).
+            'order-paper' => $this->generateSidebarDom('paper_baw', $data['page_baw'], $this->page_order_price, $this->page_name_baw).
                              $this->generateSidebarDom('paper_clr', $data['page_clr'], $this->page_price_clr, $this->page_name_clr).
                              $this->generateSidebarDom('paper', $data['page_baw'], $this->paper_option_price, $basics['papers']['formatted'][$data['paper_options']]['label'], '€', false),
         ];
