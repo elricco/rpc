@@ -29,9 +29,9 @@ class PrintConfigurator
      *
      * @return string
      */
-    private function generateSidebarDom($reference, $amount, $price, $label = '', $currency = '€')
+    private function generateSidebarDom($reference, $amount, $price, $label = '', $currency = '€', $withborder = true)
     {
-        return '<div id="order-'.$reference.'" class="border-bottom">'.
+        return '<div id="order-'.$reference.'" '.(true == $withborder ? 'class="border-bottom"' : '').'>'.
                '    <div class="row py-1">'.
                '        <div class="col-6">'.$label.'</div>'.
                '        <div class="col-2"><small>x'.$amount.'</small></div>'.
@@ -108,7 +108,6 @@ class PrintConfigurator
 
             $this->total_price = number_format(floatval($this->total_price) - floatval($prices['prices']['page_baw_price']), 2);
             $prices['prices']['page_baw_price'] = $this->page_price_baw;
-
         }
 
         $this->total_price = number_format(
@@ -120,14 +119,15 @@ class PrintConfigurator
         );
         $prices['prices']['total_price'] = $this->total_price;
 
-
         // dom output needs to be modeled latest
         $this->page_name_baw = $basics['formatted_basics']['page_prices']['page_baw']['name'];
         $this->page_name_clr = $basics['formatted_basics']['page_prices']['page_clr']['name'];
 
         //model output
         $prices['dom_elements'] = [
-            'order-paper' => $this->generateSidebarDom('paper_baw', $data['page_baw'], $this->page_price_baw, $this->page_name_baw).$this->generateSidebarDom('paper_clr', $data['page_clr'], $this->page_price_clr, $this->page_name_clr),
+            'order-paper' => $this->generateSidebarDom('paper_baw', $data['page_baw'], $this->page_price_baw, $this->page_name_baw).
+                             $this->generateSidebarDom('paper_clr', $data['page_clr'], $this->page_price_clr, $this->page_name_clr).
+                             $this->generateSidebarDom('paper', $data['page_baw'], $this->paper_option_price, $basics['papers']['formatted'][$data['paper_options']]['label'], '€', false),
         ];
 
         // @ToDo: Remove this before release
