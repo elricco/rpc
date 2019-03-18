@@ -213,7 +213,7 @@ class PrintConfiguratorData
             if (!isset($paper_default) && empty($paper_default)) {
                 $paper_default = $paper['id'];
             }
-            $paper_radio_options .= $paper['paper_name'].'<br><small>'.str_replace(array(
+            $paper_radio_options = $paper['paper_name'].'<br><small>'.str_replace(array(
                     ',',
                     '<p>',
                     '</p>',
