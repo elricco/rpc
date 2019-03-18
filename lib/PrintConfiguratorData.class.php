@@ -184,6 +184,7 @@ class PrintConfiguratorData
             'dom_elements' => $dom_elements,
             'papers' => $this->format_papers(),
             'data_check' => $data_check,
+            'fixations' => self::format_fixations(),
         ];
 
         return $data;
@@ -247,7 +248,14 @@ class PrintConfiguratorData
     protected function format_fixations()
     {
         // Get Papers
-        $fixations = $this->getFixations();
+        try {
+            $fixations = $this->getFixations();
+        } catch (rex_sql_exception $e) {
+            $fixations = 'Couldn\'t get fixations: '.$e;
+        }
+
+        $fixation_radio_attributes = [];
+        $fixation_radio_attributes['unformatted'] = $fixations;
 
         // Define output of fixations (for later)
         foreach ($fixations as $key => $fixation) {
@@ -262,13 +270,19 @@ class PrintConfiguratorData
             if ($key < (count($fixations) - 1)) {
                 $fixation_radio_options .= ',';
             }
-            $fixation_radio_attributes[$fixation['id']] = [
-        'price' => $fixation['fixation_price'],
-        'vat' => $fixation['vat_rate'],
-        'min' => $fixation['min'],
-        'max' => $fixation['max'],
-    ];
+            $fixation_radio_attributes['formatted'][$fixation['id']] = [
+                'id' => $fixation['id'],
+                'name' => $fixation['fixation_name'],
+                'price' => $fixation['fixation_price'],
+                'vat' => $fixation['vat_rate'],
+                'min' => $fixation['min'],
+                'max' => $fixation['max'],
+            ];
         }
+
+        $data = $fixation_radio_attributes;
+
+        return $data;
     }
 
     protected function format_fixationsAdditions()
