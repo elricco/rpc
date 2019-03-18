@@ -138,6 +138,11 @@ class PrintConfiguratorData
         foreach ($basics as $key => $basic) {
             if ('order_flat_charge' == $basic['price_type']) {
                 $dom_elements['order_flat_charge'] = '<div class="order-flat-charge border-bottom"><div class="row py-1"><div class="col">'.$basic['price_name'].'</div> <div class="col text-right" id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</div></div></div>';
+                $formatted_basics['order_flat_charge'] = [
+                    'id' => $basic['id'],
+                    'label' => $basic['price_name'],
+                    'price' => $basic['price_rate'],
+                ];
             } elseif ('setup_flat_charge' == $basic['price_type']) {
                 $dom_elements['setup_flat_charge'] = '<div class="setup_flat_charge"><span>'.$basic['price_name'].'</span> <span id="'.$basic['price_type'].'" data-price="'.$basic['price_rate'].'">'.rex_formatter::number($basic['price_rate']).' '.$currency_symbol.'</span></div>';
             } elseif ('page_baw' == $basic['price_type'] || 'page_clr' == $basic['price_type']) {
