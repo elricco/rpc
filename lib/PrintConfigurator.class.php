@@ -136,7 +136,7 @@ class PrintConfigurator
             $this->paper_option_price = number_format(intval($this->total_pages) * floatval($basics['papers']['formatted'][$this->paper_option]['price']), 2);
             $prices['prices']['paper_price'] = $this->paper_option_price;
 
-            //calculate baw pages with order_charge
+            //calculate baw pages with order_flat_charge
             $this->page_order_price = number_format(floatval($this->page_price_baw) + floatval($this->order_flat_charge), 2);
             $prices['prices']['page_order_price'] = $this->page_order_price;
 
@@ -160,6 +160,7 @@ class PrintConfigurator
 
         //model output
         $prices['dom_elements'] = [
+            'order-data_check' => self::generateSidebarDomLight('data_check', $this->data_check_price, $basics['data_check']['formatted'][$data['data_check']]['label'], 'EUR', false),
             'order-paper' => $this->generateSidebarDom('paper_baw', $data['page_baw'], $this->page_order_price, $this->page_name_baw).
                              $this->generateSidebarDom('paper_clr', $data['page_clr'], $this->page_price_clr, $this->page_name_clr).
                              $this->generateSidebarDom('paper', $this->total_pages, $this->paper_option_price, $basics['papers']['formatted'][$data['paper_options']]['label'], 'EUR', false),

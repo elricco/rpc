@@ -37,6 +37,7 @@ $(function () {
         ).done(function (data) {
             console.log(data);
             // send paper and print
+            $('.order-data_check').html(data['dom_elements']['order-data_check']);
             $('.order-paper').html(data['dom_elements']['order-paper']);
             $('.order-subtotal').html(data['dom_elements']['order-subtotal']);
         }).fail(function () {
