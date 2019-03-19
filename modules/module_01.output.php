@@ -6,7 +6,7 @@ if (empty('REX_LINK[1]')) {
     }
 } elseif (!rex::isBackend() && !empty('REX_LINK[1]')) {
     // Get Session vars
-    $session = rex_session('order', 'array', '');
+    //$session = rex_session('order', 'array', '');
 
     $rpcData = new PrintConfiguratorData();
     $data = $rpcData->getData();
