@@ -21,9 +21,6 @@ if (empty('REX_LINK[1]')) {
     <aside class="price-sidebar">
         <div class="mb-3">
             <h5>Generell</h5>
-            <div class="order-flat_charge">'
-               .$order_flat_charge.
-               '</div>
             <div class="order-data_check">
             </div>
         </div>
