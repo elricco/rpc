@@ -31,9 +31,7 @@ if (empty('REX_LINK[1]')) {
         </div>
         <div class="mb-3">
             <h5 class="pt-2">Bindung &amp; Optionen</h5>
-            <div class="order-fixation">
-            </div>
-            <div class="order-fixation-two">
+            <div class="order-fixations">
             </div>
         </div>
         <div class="order-subtotal my-3">

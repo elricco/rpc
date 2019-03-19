@@ -22,6 +22,9 @@ class PrintConfigurator
     protected $paper_option = 0;
     protected $paper_option_price = 0;
 
+    protected $fixations = [];
+    protected $fixations_total_price = 0;
+
     /**
      * @param $reference
      * @param $amount
@@ -136,12 +139,36 @@ class PrintConfigurator
             $prices['prices']['paper_price'] = $this->paper_option_price;
         }
 
+        //calculate fixations single prices and push to array
+        foreach ($basics['fixations']['formatted'] as $key => $fixation) {
+            if (0 != $data[$key]) {
+                $fixation_price = number_format(intval($data[$key]) * floatval($fixation['price']), 2);
+                $this->fixations[$key] = [
+                    'id' => $fixation['id'],
+                    'fixation_total_price' => $fixation_price,
+                    'label' => $fixation['name'],
+                ];
+            }
+        }
+
+        //calculate fixations total price
+        foreach ($this->fixations as $key => $fixation) {
+            $this->fixations_total_price = number_format(floatval($this->fixations_total_price) + floatval($fixation['fixation_total_price']), 2);
+        }
+
+        //fixations dom output
+        $fixations_dom = '';
+        foreach ($this->fixations as $key => $fixation) {
+            $fixations_dom .= $this->generateSidebarDom($key, $data[$key], $fixation['fixation_total_price'], $fixation['label']);
+        }
+
         $this->total_price = number_format(
             floatval($this->order_flat_charge) +
             floatval($this->page_price_baw) +
             floatval($this->page_price_clr) +
             floatval($this->data_check_price) +
-            floatval($this->paper_option_price),
+            floatval($this->paper_option_price) +
+            floatval($this->fixations_total_price),
             2
         );
         $prices['prices']['total_price'] = $this->total_price;
@@ -157,6 +184,7 @@ class PrintConfigurator
                              $this->generateSidebarDom('paper_clr', $data['page_clr'], $this->page_price_clr, $this->page_name_clr).
                              $this->generateSidebarDom('paper', $this->total_pages, $this->paper_option_price, $basics['papers']['formatted'][$data['paper_options']]['label'], 'EUR', false),
             'order-subtotal' => self::generateSidebarDomLight('subtotal', $this->total_price, 'Zwischensumme', 'EUR', false),
+            'order-fixations' => $fixations_dom,
         ];
 
         // @ToDo: Remove this before release

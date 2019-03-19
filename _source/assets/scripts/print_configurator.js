@@ -40,6 +40,7 @@ $(function () {
             $('.order-data_check').html(data['dom_elements']['order-data_check']);
             $('.order-paper').html(data['dom_elements']['order-paper']);
             $('.order-subtotal').html(data['dom_elements']['order-subtotal']);
+            $('.order-fixations').html(data['dom_elements']['order-fixations']);
         }).fail(function () {
             
         });
