@@ -24,6 +24,7 @@ class PrintConfigurator
 
     protected $fixations = [];
     protected $fixations_total_price = 0;
+    protected $fixations_total_amount = 1;
 
     /**
      * @param $reference
@@ -128,6 +129,32 @@ class PrintConfigurator
         $this->paper_option_price = intval($this->total_pages) * floatval($basics['papers']['formatted'][$this->paper_option]['price']);
         $prices['prices']['paper_price'] = $this->paper_option_price;
 
+        //calculate fixations single prices and push to array
+        foreach ($basics['fixations']['formatted'] as $key => $fixation) {
+            if (0 != $data[$key]) {
+                $this->fixations_total_amount = 0;
+                $fixation_price = intval($data[$key]) * floatval($fixation['price']);
+                $this->fixations[$key] = [
+                    'id' => $fixation['id'],
+                    'fixation_total_price' => $fixation_price,
+                    'amount' => $data[$key],
+                    'label' => $fixation['name'],
+                ];
+            }
+        }
+
+        //calculate fixations total price and amount
+        foreach ($this->fixations as $key => $fixation_for_price_and_amount) {
+            $this->fixations_total_price = floatval($this->fixations_total_price) + floatval($fixation_for_price_and_amount['fixation_total_price']);
+            $this->fixations_total_amount = intval($this->fixations_total_amount) + intval($fixation_for_price_and_amount['amount']);
+        }
+        $prices['prices']['fixations_total_price'] = $this->fixations_total_price;
+
+        //calculate total pages and paper option price
+        $this->total_pages = intval($this->total_pages) * intval($this->fixations_total_amount);
+        $this->paper_option_price = intval($this->total_pages) * floatval($basics['papers']['formatted'][$this->paper_option]['price']);
+        $prices['prices']['paper_price'] = $this->paper_option_price;
+
         //re-calculate prices if double-sided prints is checked
         $this->one_or_double_sided = $data['one_or_double-sided'];
 
@@ -136,32 +163,9 @@ class PrintConfigurator
             if (1 == $this->isOdd($this->total_pages)) {
                 ++$this->total_pages;
             }
+            //re-calculate paper option price
             $this->paper_option_price = intval($this->total_pages) * floatval($basics['papers']['formatted'][$this->paper_option]['price']);
             $prices['prices']['paper_price'] = $this->paper_option_price;
-        }
-
-        //calculate fixations single prices and push to array
-        foreach ($basics['fixations']['formatted'] as $key => $fixation) {
-            if (0 != $data[$key]) {
-                $fixation_price = intval($data[$key]) * floatval($fixation['price']);
-                $this->fixations[$key] = [
-                    'id' => $fixation['id'],
-                    'fixation_total_price' => $fixation_price,
-                    'label' => $fixation['name'],
-                ];
-            }
-        }
-
-        //calculate fixations total price
-        foreach ($this->fixations as $key => $fixation_for_price) {
-            $this->fixations_total_price = floatval($this->fixations_total_price) + floatval($fixation_for_price['fixation_total_price']);
-        }
-        $prices['prices']['fixations_total_price'] = $this->fixations_total_price;
-
-        //fixations dom output
-        $fixations_dom = '';
-        foreach ($this->fixations as $key => $fixation) {
-            $fixations_dom .= $this->generateSidebarDom($key, $data[$key], $fixation['fixation_total_price'], $fixation['label']);
         }
 
         $this->total_price =
@@ -176,6 +180,12 @@ class PrintConfigurator
         // dom output needs to be modeled latest
         $this->page_name_baw = $basics['formatted_basics']['page_prices']['page_baw']['name'];
         $this->page_name_clr = $basics['formatted_basics']['page_prices']['page_clr']['name'];
+
+        //fixations dom output
+        $fixations_dom = '';
+        foreach ($this->fixations as $key => $fixation) {
+            $fixations_dom .= $this->generateSidebarDom($key, $data[$key], $fixation['fixation_total_price'], $fixation['label']);
+        }
 
         //model output
         $prices['dom_elements'] = [
