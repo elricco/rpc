@@ -132,16 +132,8 @@ class PrintConfigurator
             if (1 == $this->isOdd($this->total_pages)) {
                 ++$this->total_pages;
             }
-            $this->page_price_baw = number_format(intval($this->total_pages) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']), 2);
             $this->paper_option_price = number_format(intval($this->total_pages) * floatval($basics['papers']['formatted'][$this->paper_option]['price']), 2);
             $prices['prices']['paper_price'] = $this->paper_option_price;
-
-            //calculate baw pages with order_flat_charge
-            $this->page_order_price = number_format(floatval($this->page_price_baw) + floatval($this->order_flat_charge), 2);
-            $prices['prices']['page_order_price'] = $this->page_order_price;
-
-            $this->total_price = number_format(floatval($this->total_price) - floatval($prices['prices']['page_baw_price']), 2);
-            $prices['prices']['page_baw_price'] = $this->page_price_baw;
         }
 
         $this->total_price = number_format(
