@@ -5,6 +5,7 @@
 class PrintConfigurator
 {
     protected $total_price = 0;
+    protected $order_flat_charge = 0;
     protected $page_price_baw = 0;
     protected $page_price_clr = 0;
     protected $page_order_price = 0;
@@ -25,18 +26,38 @@ class PrintConfigurator
      * @param $reference
      * @param $amount
      * @param $price
-     * @param $currency
-     * @param $label
+     * @param string $label
+     * @param string $currency
+     * @param bool   $withborder
      *
      * @return string
      */
-    private function generateSidebarDom($reference, $amount, $price, $label = '', $currency = '€', $withborder = true)
+    private function generateSidebarDom($reference, $amount, $price, $label = '', $currency = 'EUR', $withborder = true)
     {
         return '<div id="order-'.$reference.'" '.(true == $withborder ? 'class="border-bottom"' : '').'>'.
                '    <div class="row py-1">'.
                '        <div class="col-6">'.$label.'</div>'.
                '        <div class="col-2"><small>x'.$amount.'</small></div>'.
                '        <div class="col-4 text-right">'.number_format($price, 2, ',', '.').' '.$currency.'</div>'.
+               '    </div>'.
+               '</div>';
+    }
+
+    /**
+     * @param $reference
+     * @param $price
+     * @param string $label
+     * @param string $currency
+     * @param bool   $withborder
+     *
+     * @return string
+     */
+    private function generateSidebarDomLight($reference, $price, $label = '', $currency = 'EUR', $withborder = true)
+    {
+        return '<div id="order-'.$reference.'" '.(true == $withborder ? 'class="border-bottom"' : '').'>'.
+               '    <div class="row py-1">'.
+               '        <div class="col">'.$label.'</div>'.
+               '        <div class="col text-right">'.number_format($price, 2, ',', '.').' '.$currency.'</div>'.
                '    </div>'.
                '</div>';
     }
@@ -62,8 +83,11 @@ class PrintConfigurator
         $rpc_data = new PrintConfiguratorData();
         $basics = $rpc_data->getData();
 
+        $this->order_flat_charge = $basics['formatted_basics']['order_flat_charge']['price'];
+
         //model output
         $prices['prices'] = [
+            'order_flat_charge' => $this->order_flat_charge,
             'page_baw_price' => $this->page_price_baw,
             'page_clr_price' => $this->page_price_clr,
             'page_order_price' => $this->page_order_price,
@@ -113,7 +137,7 @@ class PrintConfigurator
             $prices['prices']['paper_price'] = $this->paper_option_price;
 
             //calculate baw pages with order_charge
-            $this->page_order_price = number_format(floatval($this->page_price_baw) + floatval($basics['formatted_basics']['order_flat_charge']['price']), 2);
+            $this->page_order_price = number_format(floatval($this->page_price_baw) + floatval($this->order_flat_charge), 2);
             $prices['prices']['page_order_price'] = $this->page_order_price;
 
             $this->total_price = number_format(floatval($this->total_price) - floatval($prices['prices']['page_baw_price']), 2);
@@ -121,6 +145,7 @@ class PrintConfigurator
         }
 
         $this->total_price = number_format(
+            floatval($this->order_flat_charge) +
             floatval($this->page_price_baw) +
             floatval($this->page_price_clr) +
             floatval($this->data_check_price) +
@@ -137,7 +162,8 @@ class PrintConfigurator
         $prices['dom_elements'] = [
             'order-paper' => $this->generateSidebarDom('paper_baw', $data['page_baw'], $this->page_order_price, $this->page_name_baw).
                              $this->generateSidebarDom('paper_clr', $data['page_clr'], $this->page_price_clr, $this->page_name_clr).
-                             $this->generateSidebarDom('paper', $data['page_baw'], $this->paper_option_price, $basics['papers']['formatted'][$data['paper_options']]['label'], '€', false),
+                             $this->generateSidebarDom('paper', $this->total_pages, $this->paper_option_price, $basics['papers']['formatted'][$data['paper_options']]['label'], 'EUR', false),
+            'order-subtotal' => self::generateSidebarDomLight('subtotal', $this->total_price, 'Zwischensumme', 'EUR', false),
         ];
 
         // @ToDo: Remove this before release

@@ -33,6 +33,7 @@ $(function () {
       console.log(data); // send paper and print
 
       $('.order-paper').html(data['dom_elements']['order-paper']);
+      $('.order-subtotal').html(data['dom_elements']['order-subtotal']);
     }).fail(function () {});
   } // set range slider for black and white pages
 
