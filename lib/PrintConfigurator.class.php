@@ -86,7 +86,7 @@ class PrintConfigurator
         $rpc_data = new PrintConfiguratorData();
         $basics = $rpc_data->getData();
 
-        $this->order_flat_charge = $basics['formatted_basics']['order_flat_charge']['price'];
+        $this->order_flat_charge = floatval($basics['formatted_basics']['order_flat_charge']['price']);
 
         //model output
         $prices['prices'] = [
@@ -96,6 +96,7 @@ class PrintConfigurator
             'page_order_price' => $this->page_order_price,
             'data_check_price' => $this->data_check_price,
             'paper_price' => $this->paper_option_price,
+            'fixations_total_price' => $this->fixations_total_price,
             'total_price' => $this->total_price,
         ];
 
@@ -106,25 +107,25 @@ class PrintConfigurator
         $this->total_pages = intval($data['page_baw']);
 
         //calculate total / baw pages
-        $this->page_price_baw = number_format(intval($baw_pages) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']), 2);
+        $this->page_price_baw = intval($baw_pages) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']);
         $prices['prices']['page_baw_price'] = $this->page_price_baw;
 
         //calculate baw pages with order_charge
-        $this->page_order_price = number_format(floatval($this->page_price_baw) + floatval($basics['formatted_basics']['order_flat_charge']['price']), 2);
+        $this->page_order_price = floatval($this->page_price_baw) + floatval($basics['formatted_basics']['order_flat_charge']['price']);
         $prices['prices']['page_order_price'] = $this->page_order_price;
 
         //calculate coloured pages
-        $this->page_price_clr = number_format(intval($data['page_clr']) * floatval($basics['formatted_basics']['page_prices']['page_clr']['price']), 2);
+        $this->page_price_clr = intval($data['page_clr']) * floatval($basics['formatted_basics']['page_prices']['page_clr']['price']);
         $prices['prices']['page_clr_price'] = $this->page_price_clr;
 
         //calculate data check price
         $this->data_check = $data['data_check'];
-        $this->data_check_price = $basics['data_check']['formatted'][$this->data_check]['price'];
+        $this->data_check_price = floatval($basics['data_check']['formatted'][$this->data_check]['price']);
         $prices['prices']['data_check_price'] = $this->data_check_price;
 
         //calculate paper options price
         $this->paper_option = $data['paper_options'];
-        $this->paper_option_price = number_format(intval($this->total_pages) * floatval($basics['papers']['formatted'][$this->paper_option]['price']), 2);
+        $this->paper_option_price = intval($this->total_pages) * floatval($basics['papers']['formatted'][$this->paper_option]['price']);
         $prices['prices']['paper_price'] = $this->paper_option_price;
 
         //re-calculate prices if double-sided prints is checked
@@ -135,14 +136,14 @@ class PrintConfigurator
             if (1 == $this->isOdd($this->total_pages)) {
                 ++$this->total_pages;
             }
-            $this->paper_option_price = number_format(intval($this->total_pages) * floatval($basics['papers']['formatted'][$this->paper_option]['price']), 2);
+            $this->paper_option_price = intval($this->total_pages) * floatval($basics['papers']['formatted'][$this->paper_option]['price']);
             $prices['prices']['paper_price'] = $this->paper_option_price;
         }
 
         //calculate fixations single prices and push to array
         foreach ($basics['fixations']['formatted'] as $key => $fixation) {
             if (0 != $data[$key]) {
-                $fixation_price = number_format(intval($data[$key]) * floatval($fixation['price']), 2);
+                $fixation_price = intval($data[$key]) * floatval($fixation['price']);
                 $this->fixations[$key] = [
                     'id' => $fixation['id'],
                     'fixation_total_price' => $fixation_price,
@@ -152,9 +153,10 @@ class PrintConfigurator
         }
 
         //calculate fixations total price
-        foreach ($this->fixations as $key => $fixation) {
-            $this->fixations_total_price = number_format(floatval($this->fixations_total_price) + floatval($fixation['fixation_total_price']), 2);
+        foreach ($this->fixations as $key => $fixation_for_price) {
+            $this->fixations_total_price = floatval($this->fixations_total_price) + floatval($fixation_for_price['fixation_total_price']);
         }
+        $prices['prices']['fixations_total_price'] = $this->fixations_total_price;
 
         //fixations dom output
         $fixations_dom = '';
@@ -162,16 +164,14 @@ class PrintConfigurator
             $fixations_dom .= $this->generateSidebarDom($key, $data[$key], $fixation['fixation_total_price'], $fixation['label']);
         }
 
-        $this->total_price = number_format(
+        $this->total_price =
             floatval($this->order_flat_charge) +
             floatval($this->page_price_baw) +
             floatval($this->page_price_clr) +
             floatval($this->data_check_price) +
             floatval($this->paper_option_price) +
-            floatval($this->fixations_total_price),
-            2
-        );
-        $prices['prices']['total_price'] = $this->total_price;
+            floatval($this->fixations_total_price);
+        $prices['prices']['total_price'] = round($this->total_price, 2);
 
         // dom output needs to be modeled latest
         $this->page_name_baw = $basics['formatted_basics']['page_prices']['page_baw']['name'];
