@@ -275,7 +275,7 @@ class PrintConfiguratorData
             if ($key < (count($fixations) - 1)) {
                 $fixation_radio_options .= ',';
             }
-            $fixation_radio_attributes['formatted'][$fixation['id']] = [
+            $fixation_radio_attributes['formatted']['fixation_'.$fixation['id']] = [
                 'id' => $fixation['id'],
                 'name' => $fixation['fixation_name'],
                 'price' => $fixation['fixation_price'],
