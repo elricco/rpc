@@ -305,7 +305,7 @@ class PrintConfiguratorData
 
         // Define output of fixations (for later)
         foreach ($fixationsAdditions as $key => $addition) {
-            $fixation_addition_radio_attributes['formatted'][$addition['id']] = [
+            $fixation_addition_radio_attributes['formatted']['fixation_addition_'.$addition['id']] = [
                 'id' => $addition['id'],
                 'name' => $addition['name'],
                 'price' => $addition['price'],
