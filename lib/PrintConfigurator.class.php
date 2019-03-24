@@ -28,6 +28,7 @@ class PrintConfigurator
 
     protected $fixation_additions = [];
     protected $fixation_additions_total_price = 0;
+    protected $fixation_additions_total_amount = 0;
 
     /**
      * @param $reference
@@ -78,14 +79,12 @@ class PrintConfigurator
      *
      * @return float
      */
-    private function calculateInputFieldsOfSameKind(array $postData, array $formattedValues, array &$internalReference, &$totalPrice, $fixationsTotalAmount = false)
+    private function calculateInputFieldsOfSameKind(array $postData, array $formattedValues, array &$internalReference, &$totalPrice, &$totalAmount)
     {
         //calculate single prices and push to array
         foreach ($formattedValues as $key => $value) {
             if (0 != $postData[$key]) {
-                if (true == $fixationsTotalAmount) {
-                    $this->fixations_total_amount = 0;
-                }
+                $totalAmount = 0;
                 $price = intval($postData[$key]) * floatval($value['price']);
                 $internalReference[$key] = [
                     'id' => $value['id'],
@@ -99,9 +98,7 @@ class PrintConfigurator
         //calculate total price and amount
         foreach ($internalReference as $key => $value) {
             $totalPrice = floatval($totalPrice) + floatval($value['price']);
-            if (true == $fixationsTotalAmount) {
-                $this->fixations_total_amount = intval($this->fixations_total_amount) + intval($value['amount']);
-            }
+            $totalAmount = intval($totalAmount) + intval($value['amount']);
         }
 
         return $totalPrice;
@@ -139,6 +136,7 @@ class PrintConfigurator
             'data_check_price' => $this->data_check_price,
             'paper_price' => $this->paper_option_price,
             'fixations_total_price' => $this->fixations_total_price,
+            'fixation_additions_total_price' => $this->fixation_additions_total_price,
             'total_price' => $this->total_price,
         ];
 
@@ -171,10 +169,10 @@ class PrintConfigurator
         $prices['prices']['paper_price'] = $this->paper_option_price;
 
         //calculate fixations single prices and push to array
-        $prices['prices']['fixations_total_price'] = self::calculateInputFieldsOfSameKind($data, $basics['fixations']['formatted'], $this->fixations, $this->fixations_total_price, true);
+        $prices['prices']['fixations_total_price'] = self::calculateInputFieldsOfSameKind($data, $basics['fixations']['formatted'], $this->fixations, $this->fixations_total_price, $this->fixations_total_amount);
 
         //calculate fixation additions single prices and push to array
-        $prices['prices']['fixation_additions_total_price'] = self::calculateInputFieldsOfSameKind($data, $basics['fixation_additions']['formatted'], $this->fixation_additions, $this->fixation_additions_total_price);
+        $prices['prices']['fixation_additions_total_price'] = self::calculateInputFieldsOfSameKind($data, $basics['fixation_additions']['formatted'], $this->fixation_additions, $this->fixation_additions_total_price, $this->fixation_additions_total_amount);
 
         //calculate total pages and paper option price
         $this->total_pages = intval($this->total_pages) * intval($this->fixations_total_amount);
