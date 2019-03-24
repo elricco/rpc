@@ -70,6 +70,44 @@ class PrintConfigurator
     }
 
     /**
+     * @param array $postData
+     * @param array $formattedValues
+     * @param array $internalReference - needs to be a value of internal var like $this->fixations
+     * @param $totalPrice - needs to be a value of internal var like $this->fixations_total_price
+     * @param bool $fixationsTotalAmount
+     *
+     * @return float
+     */
+    private function calculateInputFieldsOfSameKind(array $postData, array $formattedValues, array &$internalReference, &$totalPrice, $fixationsTotalAmount = false)
+    {
+        //calculate single prices and push to array
+        foreach ($formattedValues as $key => $value) {
+            if (0 != $postData[$key]) {
+                if (true == $fixationsTotalAmount) {
+                    $this->fixations_total_amount = 0;
+                }
+                $price = intval($postData[$key]) * floatval($value['price']);
+                $internalReference[$key] = [
+                    'id' => $value['id'],
+                    'price' => $price,
+                    'amount' => $postData[$key],
+                    'label' => $value['name'],
+                ];
+            }
+        }
+
+        //calculate total price and amount
+        foreach ($internalReference as $key => $value) {
+            $totalPrice = floatval($totalPrice) + floatval($value['price']);
+            if (true == $fixationsTotalAmount) {
+                $this->fixations_total_amount = intval($this->fixations_total_amount) + intval($value['amount']);
+            }
+        }
+
+        return $totalPrice;
+    }
+
+    /**
      * @param $number
      *
      * @return int
@@ -133,44 +171,10 @@ class PrintConfigurator
         $prices['prices']['paper_price'] = $this->paper_option_price;
 
         //calculate fixations single prices and push to array
-        foreach ($basics['fixations']['formatted'] as $key => $fixation) {
-            if (0 != $data[$key]) {
-                $this->fixations_total_amount = 0;
-                $fixation_price = intval($data[$key]) * floatval($fixation['price']);
-                $this->fixations[$key] = [
-                    'id' => $fixation['id'],
-                    'fixation_total_price' => $fixation_price,
-                    'amount' => $data[$key],
-                    'label' => $fixation['name'],
-                ];
-            }
-        }
+        $prices['prices']['fixations_total_price'] = self::calculateInputFieldsOfSameKind($data, $basics['fixations']['formatted'], $this->fixations, $this->fixations_total_price, true);
 
-        //calculate fixations total price and amount
-        foreach ($this->fixations as $key => $fixation_for_price_and_amount) {
-            $this->fixations_total_price = floatval($this->fixations_total_price) + floatval($fixation_for_price_and_amount['fixation_total_price']);
-            $this->fixations_total_amount = intval($this->fixations_total_amount) + intval($fixation_for_price_and_amount['amount']);
-        }
-        $prices['prices']['fixations_total_price'] = $this->fixations_total_price;
-
-        //calculate fixations single prices and push to array
-        foreach ($basics['fixation_additions']['formatted'] as $key => $addition) {
-            if (0 != $data[$key]) {
-                $fixation_addition_price = intval($data[$key]) * floatval($addition['price']);
-                $this->fixation_additions[$key] = [
-                    'id' => $addition['id'],
-                    'fixation_addition_total_price' => $fixation_addition_price,
-                    'amount' => $data[$key],
-                    'label' => $addition['name'],
-                ];
-            }
-        }
-
-        //calculate fixations total price and amount
-        foreach ($this->fixation_additions as $key => $fixation_addition_for_price) {
-            $this->fixation_additions_total_price = floatval($this->fixation_additions_total_price) + floatval($fixation_addition_for_price['fixation_addition_total_price']);
-        }
-        $prices['prices']['fixation_additions_total_price'] = $this->fixation_additions_total_price;
+        //calculate fixation additions single prices and push to array
+        $prices['prices']['fixation_additions_total_price'] = self::calculateInputFieldsOfSameKind($data, $basics['fixation_additions']['formatted'], $this->fixation_additions, $this->fixation_additions_total_price);
 
         //calculate total pages and paper option price
         $this->total_pages = intval($this->total_pages) * intval($this->fixations_total_amount);
@@ -207,11 +211,11 @@ class PrintConfigurator
         //fixations dom output
         $fixations_dom = '';
         foreach ($this->fixations as $key => $fixation) {
-            $fixations_dom .= $this->generateSidebarDom($key, $data[$key], $fixation['fixation_total_price'], $fixation['label']);
+            $fixations_dom .= $this->generateSidebarDom($key, $data[$key], $fixation['price'], $fixation['label']);
         }
 
         foreach ($this->fixation_additions as $key => $addition) {
-            $fixations_dom .= $this->generateSidebarDom($key, $data[$key], $addition['fixation_addition_total_price'], $addition['label']);
+            $fixations_dom .= $this->generateSidebarDom($key, $data[$key], $addition['price'], $addition['label']);
         }
 
         //model output
