@@ -13,6 +13,7 @@ if (empty('REX_LINK[1]')) {
     $order_flat_charge = $data['dom_elements']['order_flat_charge'];
     $page_prices = $data['formatted_basics']['page_prices'];
     $fixations = $data['fixations']['formatted'];
+    $fixation_additions = $data['fixation_additions']['formatted'];
     //debug stuff
     dump($data);
     //dump($page_prices);
@@ -73,9 +74,17 @@ if (empty('REX_LINK[1]')) {
 
     $yform->setValueField('choice', ['paper_options', 'Papiere', '{'.$data['papers']['paper_json'].'}', 1, 0, $data['papers']['paper_default']]);
 
+    $yform->setValueField('fieldset', array('fixations', 'Bindungen'));
     foreach ($fixations as $key => $fixation) {
         $yform->setValueField('number', array('fixation_'.$fixation['id'], $fixation['name'], '3', '0', '0', '', 'Stk.'));
     }
+    $yform->setValueField('fieldset', array('fixations', '', '', 'onlyclose'));
+
+    $yform->setValueField('fieldset', array('fixation_additions', 'Optionen'));
+    foreach ($fixation_additions as $key => $fixation_addition) {
+        $yform->setValueField('number', array('fixation_addition_'.$fixation_addition['id'], $fixation_addition['name'], '3', '0', '0', '', 'Stk.'));
+    }
+    $yform->setValueField('fieldset', array('fixation_additions', '', '', 'onlyclose'));
 
     $yform->setValueField('html', array('html', 'HTML', '</div>'));
     $yform->setValueField('fieldset', array('sidebar', '', 'col-12 col-md-4'));
@@ -84,7 +93,7 @@ if (empty('REX_LINK[1]')) {
     $yform->setValueField('html', array('html', 'HTML', '</div>'));
     $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
     $yform->setValueField('html', array('html', 'HTML', '<div class="col-12">'));
-    $yform->setValueField('submit', array('submit', 'Bestellung aufgeben'));
+    $yform->setValueField('submit', array('submit', 'Weiter'));
     $yform->setValueField('html', array('html', 'HTML', '</div>'));
     $yform->setValueField('html', array('html', 'HTML', '</div>'));
     echo $yform->getForm();

@@ -187,9 +187,10 @@ class PrintConfiguratorData
             'basics' => $basics,
             'formatted_basics' => $formatted_basics,
             'dom_elements' => $dom_elements,
-            'papers' => $this->format_papers(),
+            'papers' => self::format_papers(),
             'data_check' => $data_check,
             'fixations' => self::format_fixations(),
+            'fixation_additions' => self::format_fixationsAdditions(),
         ];
 
         return $data;
@@ -293,14 +294,25 @@ class PrintConfiguratorData
     protected function format_fixationsAdditions()
     {
         // Get Fixation Additions
-        $fixationsAdditions = $this->getFixationsAdditions();
+        try {
+            $fixationsAdditions = $this->getFixationsAdditions();
+        } catch (rex_sql_exception $e) {
+            $fixationsAdditions = 'Couldn\'t get fixations: '.$e;
+        }
+
+        $fixation_addition_radio_attributes = [];
+        $fixation_addition_radio_attributes['unformatted'] = $fixationsAdditions;
 
         // Define output of fixations (for later)
         foreach ($fixationsAdditions as $key => $addition) {
-            $fixation_addition_radio_attributes[$addition['id']] = [
+            $fixation_addition_radio_attributes['formatted'][$addition['id']] = [
+                'id' => $addition['id'],
+                'name' => $addition['name'],
                 'price' => $addition['price'],
             ];
         }
+
+        return $fixation_addition_radio_attributes;
     }
 
     public function buildVariation($elements = [])
