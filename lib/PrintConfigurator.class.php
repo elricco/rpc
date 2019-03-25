@@ -30,6 +30,10 @@ class PrintConfigurator
     protected $fixation_additions_total_price = 0;
     protected $fixation_additions_total_amount = 0;
 
+    protected $fixation_additions_option = 0;
+    protected $fixation_additions_option_total_price = 0;
+    protected $fixation_additions_option_total_amount = 0;
+
     /**
      * @param $reference
      * @param $amount
@@ -137,6 +141,7 @@ class PrintConfigurator
             'paper_price' => $this->paper_option_price,
             'fixations_total_price' => $this->fixations_total_price,
             'fixation_additions_total_price' => $this->fixation_additions_total_price,
+            'fixation_additions_option_total_price' => $this->fixation_additions_option_total_price,
             'total_price' => $this->total_price,
         ];
 
@@ -174,6 +179,12 @@ class PrintConfigurator
         //calculate fixation additions single prices and push to array
         $prices['prices']['fixation_additions_total_price'] = self::calculateInputFieldsOfSameKind($data, $basics['fixation_additions']['formatted'], $this->fixation_additions, $this->fixation_additions_total_price, $this->fixation_additions_total_amount);
 
+        //calculate fixation additions optios single prices and push to array
+        $this->fixation_additions_option = $data['fixation_options'];
+        $this->fixation_additions_option_total_amount = intval($this->fixation_additions_total_amount);
+        $this->fixation_additions_option_total_price = intval($this->fixation_additions_option_total_amount) * floatval($basics['fixation_options']['formatted'][$this->fixation_additions_option]['price']);
+        $prices['prices']['fixation_additions_option_total_price'] = $this->fixation_additions_option_total_price;
+
         //calculate total pages and paper option price
         $this->total_pages = intval($this->total_pages) * intval($this->fixations_total_amount);
         $this->paper_option_price = intval($this->total_pages) * floatval($basics['papers']['formatted'][$this->paper_option]['price']);
@@ -199,6 +210,7 @@ class PrintConfigurator
             floatval($this->data_check_price) +
             floatval($this->paper_option_price) +
             floatval($this->fixation_additions_total_price) +
+            floatval($this->fixation_additions_option_total_price) +
             floatval($this->fixations_total_price);
         $prices['prices']['total_price'] = round($this->total_price, 2);
 
@@ -215,6 +227,7 @@ class PrintConfigurator
         foreach ($this->fixation_additions as $key => $addition) {
             $fixations_dom .= $this->generateSidebarDom($key, $data[$key], $addition['price'], $addition['label']);
         }
+        $fixations_dom .= $this->generateSidebarDom('fixation_options', $this->fixation_additions_option_total_amount, $this->fixation_additions_option_total_price, $basics['fixation_options']['formatted'][$this->fixation_additions_option]['name']);
 
         //model output
         $prices['dom_elements'] = [
