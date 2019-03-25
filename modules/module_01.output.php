@@ -86,6 +86,8 @@ if (empty('REX_LINK[1]')) {
     }
     $yform->setValueField('fieldset', array('fixation_additions', '', '', 'onlyclose'));
 
+    $yform->setValueField('choice', ['fixation_options', '', '{'.$data['fixation_options']['variations_json'].'}', 1, 0, $data['fixation_options']['variations_default']]);
+
     $yform->setValueField('html', array('html', 'HTML', '</div>'));
     $yform->setValueField('fieldset', array('sidebar', '', 'col-12 col-md-4'));
     $yform->setValueField('html', array('html', 'HTML', $sidebar));
