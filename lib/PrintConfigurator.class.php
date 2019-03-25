@@ -369,6 +369,8 @@ class PrintConfigurator
     public function setOrder()
     {
         //rex_set_session( 'order', serialize($_POST));
-        rex_set_session('order', $_POST);
+        $rpcData = new PrintConfigurator();
+        $data = $rpcData->calculate_price_for_dom($_POST);
+        rex_set_session('order', $data);
     }
 }
