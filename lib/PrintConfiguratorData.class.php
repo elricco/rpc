@@ -112,6 +112,25 @@ class PrintConfiguratorData
         return $options;
     }
 
+    public function getFixationsAdditionsOptions()
+    {
+        $options = [];
+
+        $sql2 = rex_sql::factory();
+        $query2 = 'SELECT * FROM rex_rpc_fixation_addition_options';
+        $resultVariation = $sql2->getArray($query2);
+        foreach ($resultVariation as $variation) {
+            $options[$variation['id']] = [
+                'id' => $variation['id'],
+                'name' => $variation['fixation_addition_option_name'],
+                'description' => $variation['fixation_addition_options_description'],
+                'price' => $variation['fixation_addition_options_price'],
+            ];
+        }
+
+        return $options;
+    }
+
     /**
      * @return array
      *
@@ -191,6 +210,7 @@ class PrintConfiguratorData
             'data_check' => $data_check,
             'fixations' => self::format_fixations(),
             'fixation_additions' => self::format_fixationsAdditions(),
+            'fixation_options' => self::buildVariation(),
         ];
 
         return $data;
@@ -315,17 +335,43 @@ class PrintConfiguratorData
         return $fixation_addition_radio_attributes;
     }
 
-    public function buildVariation($elements = [])
+    public function buildVariation()
     {
-        $variation_radio_options = '';
-        foreach ($elements as $key => $variation) {
-            $variation_radio_options .= $variation['name'].'='.$variation['id'];
-            if ($key < (count($elements))) {
-                $variation_radio_options .= ',';
+
+        // Get Fixation Additions
+        try {
+            $fixationsAdditionsOptions = $this->getFixationsAdditionsOptions();
+        } catch (rex_sql_exception $e) {
+            $fixationsAdditionsOptions = 'Couldn\'t get fixations: '.$e;
+        }
+
+        $variations = [];
+        $variations['unformatted'] = [$fixationsAdditionsOptions];
+        $variations_default = $fixationsAdditionsOptions['1']['id'];
+
+        $variations_json = '';
+        foreach ($fixationsAdditionsOptions as $key => $variation) {
+            if (!isset($variations_default) && empty($variations_default)) {
+                $variations_default = $variation['id'];
+            }
+            $variations['formatted'][$variation['id']] = [
+                'id' => $variation['id'],
+                'name' => $variation['name'],
+                'description' => $variation['description'],
+                'price' => $variation['price'],
+            ];
+            $variations_json .= '"'.$variation['name'].'":"'.$variation['id'].'"';
+            if ($key < (count($variations))) {
+                $variations_json .= ',';
             }
         }
 
-        return $variation_radio_options;
+        $variations['variations_default'] = $variations_default;
+        $variations['variations_json'] = $variations_json;
+
+        $data = $variations;
+
+        return $data;
     }
 
     public function getVariationDefault($elements = [])
