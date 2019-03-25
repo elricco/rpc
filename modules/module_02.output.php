@@ -10,7 +10,7 @@ if (empty('REX_LINK[1]')) {
     }
 } else {
     //check if session has value order - if not redirect to print configurator
-    if ((PHP_SESSION_ACTIVE != session_status() || PHP_SESSION_NONE) && !rex::isBackend()) {
+    if ((PHP_SESSION_ACTIVE != session_status()) && !rex::isBackend()) {
         rex_redirect('REX_LINK[1]');
     } else {
         if (empty(rex_session('order', 'array', ''))) {
