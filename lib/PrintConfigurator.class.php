@@ -14,6 +14,11 @@ class PrintConfigurator
     protected $page_name_clr = '';
 
     protected $total_pages = 0;
+    protected $total_pages_single = 0;
+    protected $baw_pages = 0;
+    protected $baw_pages_single = 0;
+    protected $clr_pages = 0;
+    protected $clr_pages_single = 0;
     protected $one_or_double_sided = 0;
 
     protected $data_check = 0;
@@ -145,22 +150,28 @@ class PrintConfigurator
             'total_price' => $this->total_price,
         ];
 
-        //substract colored pages from total pages
-        //maybe add a switch to config page if colored pages should be substracted?
-        //$baw_pages = intval($data['page_baw']) - intval($data['page_clr']);
-        $baw_pages = intval($data['page_baw']);
+        //set all the page types
+        $this->baw_pages = intval($data['page_baw']);
+        $this->baw_pages_single = intval($data['page_baw']);
+        $this->clr_pages = intval($data['page_clr']);
+        $this->clr_pages_single = intval($data['page_clr']);
         $this->total_pages = intval($data['page_baw']);
+        $this->total_pages_single = intval($data['page_baw']);
+
+        //substract colored pages from total pages
+        $this->baw_pages = intval($this->baw_pages_single) - intval($this->clr_pages_single);
+        $this->baw_pages_single = intval($this->baw_pages_single) - intval($this->clr_pages_single);
 
         //calculate total / baw pages
-        $this->page_price_baw = intval($baw_pages) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']);
+        $this->page_price_baw = intval($this->baw_pages) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']);
         $prices['prices']['page_baw_price'] = $this->page_price_baw;
 
         //calculate baw pages with order_charge
-        $this->page_order_price = floatval($this->page_price_baw) + floatval($basics['formatted_basics']['order_flat_charge']['price']);
+        $this->page_order_price = floatval($basics['formatted_basics']['order_flat_charge']['price']);
         $prices['prices']['page_order_price'] = $this->page_order_price;
 
         //calculate coloured pages
-        $this->page_price_clr = intval($data['page_clr']) * floatval($basics['formatted_basics']['page_prices']['page_clr']['price']);
+        $this->page_price_clr = intval($this->clr_pages) * floatval($basics['formatted_basics']['page_prices']['page_clr']['price']);
         $prices['prices']['page_clr_price'] = $this->page_price_clr;
 
         //calculate data check price
@@ -175,6 +186,16 @@ class PrintConfigurator
 
         //calculate fixations single prices and push to array
         $prices['prices']['fixations_total_price'] = self::calculateInputFieldsOfSameKind($data, $basics['fixations']['formatted'], $this->fixations, $this->fixations_total_price, $this->fixations_total_amount);
+
+        //re-calculate baw_pages prices
+        $this->baw_pages = intval($this->baw_pages_single) * intval($this->fixations_total_amount);
+        $this->page_price_baw = intval($this->baw_pages) * floatval($basics['formatted_basics']['page_prices']['page_baw']['price']);
+        $prices['prices']['page_baw_price'] = $this->page_price_baw;
+
+        //re-calculate coloured pages
+        $this->clr_pages = intval($this->clr_pages_single) * intval($this->fixations_total_amount);
+        $this->page_price_clr = intval($this->clr_pages) * floatval($basics['formatted_basics']['page_prices']['page_clr']['price']);
+        $prices['prices']['page_clr_price'] = $this->page_price_clr;
 
         //calculate fixation additions single prices and push to array
         $prices['prices']['fixation_additions_total_price'] = self::calculateInputFieldsOfSameKind($data, $basics['fixation_additions']['formatted'], $this->fixation_additions, $this->fixation_additions_total_price, $this->fixation_additions_total_amount);
@@ -232,8 +253,9 @@ class PrintConfigurator
         //model output
         $prices['dom_elements'] = [
             'order-data_check' => self::generateSidebarDomLight('data_check', $this->data_check_price, $basics['data_check']['formatted'][$data['data_check']]['label'], 'EUR', false),
-            'order-paper' => $this->generateSidebarDom('paper_baw', $data['page_baw'], $this->page_order_price, $this->page_name_baw).
-                             $this->generateSidebarDom('paper_clr', $data['page_clr'], $this->page_price_clr, $this->page_name_clr).
+            'order-paper' => $this->generateSidebarDom('paper_total', $this->total_pages_single, $this->page_order_price, $this->page_name_baw.'<br><small>1 Exemplar</small>').
+                             $this->generateSidebarDom('paper_baw', $this->baw_pages, $this->page_price_baw, 'S/W Seiten').
+                             $this->generateSidebarDom('paper_clr', $this->clr_pages, $this->page_price_clr, $this->page_name_clr).
                              $this->generateSidebarDom('paper', $this->total_pages, $this->paper_option_price, $basics['papers']['formatted'][$data['paper_options']]['label'], 'EUR', false),
             'order-subtotal' => self::generateSidebarDomLight('subtotal', $this->total_price, 'Zwischensumme', 'EUR', false),
             'order-fixations' => $fixations_dom,
