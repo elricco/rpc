@@ -17,7 +17,38 @@ if (empty('REX_LINK[1]')) {
             rex_redirect('REX_LINK[1]');
         } else {
             $session = rex_session('order', 'array', '');
-            //dump($session);
+            $rpcData = new PrintConfiguratorData();
+            $data = $rpcData->getData();
+
+            //debug stuff
+            dump($session);
+            dump($data);
+
+            $title_options = 'Daten Titelseite & CD/DVD';
+            $sidebar = '
+    <aside class="price-sidebar">
+        <div class="mb-3">
+            <h5>Generell</h5>
+            <div class="order-data_check">'.
+               $session['dom_elements']['order-data_check']
+            .'</div>
+        </div>
+        <div class="mb-3">
+            <h5 class="pt-2">Papier &amp; Druck</h5>
+            <div class="order-paper">'.
+               $session['dom_elements']['order-paper']
+           .'</div>
+        </div>
+        <div class="mb-3">
+            <h5 class="pt-2">Bindung &amp; Optionen</h5>
+            <div class="order-fixations">'.
+               $session['dom_elements']['order-fixations']
+           .'</div>
+        </div>
+        <div class="order-subtotal my-3">'.
+           $session['dom_elements']['order-subtotal']
+       .'</div>
+    </aside>';
 
             echo '<div class="container"><div class="row"><div class="col-12">';
             echo '<h1>Optionen</h1>';
@@ -37,7 +68,7 @@ if (empty('REX_LINK[1]')) {
             $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-8">'));
 
             // data area
-            $yform->setValueField('fieldset', array('name_and_number', 'Daten Titelseite & CD/DVD'));
+            $yform->setValueField('fieldset', array('name_and_number', $title_options));
             $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-6">'));
             $yform->setValueField('text', array('firstnname', 'Vorname'));
