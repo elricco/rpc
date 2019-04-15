@@ -16,37 +16,42 @@ if (empty('REX_LINK[1]')) {
         if (empty(rex_session('order', 'array', ''))) {
             rex_redirect('REX_LINK[1]');
         } else {
-            $session = rex_session('order', 'array', '');
+            $order_config = rex_session('order', 'array', '');
             $rpcData = new PrintConfiguratorData();
             $data = $rpcData->getData();
 
             //debug stuff
-            dump($session);
+            dump($order_config);
             dump($data);
 
-            $title_options = 'Daten Titelseite & CD/DVD';
+            if ($order_config['FIXATION_SPECIAL']) {
+                $title_options = 'Daten Titelseite & CD/DVD';
+            } else {
+                $title_options = 'Daten CD/DVD';
+            }
+
             $sidebar = '
     <aside class="price-sidebar">
         <div class="mb-3">
             <h5>Generell</h5>
             <div class="order-data_check">'.
-               $session['dom_elements']['order-data_check']
+               $order_config['dom_elements']['order-data_check']
             .'</div>
         </div>
         <div class="mb-3">
             <h5 class="pt-2">Papier &amp; Druck</h5>
             <div class="order-paper">'.
-               $session['dom_elements']['order-paper']
+               $order_config['dom_elements']['order-paper']
            .'</div>
         </div>
         <div class="mb-3">
             <h5 class="pt-2">Bindung &amp; Optionen</h5>
             <div class="order-fixations">'.
-               $session['dom_elements']['order-fixations']
+               $order_config['dom_elements']['order-fixations']
            .'</div>
         </div>
         <div class="order-subtotal my-3">'.
-           $session['dom_elements']['order-subtotal']
+           $order_config['dom_elements']['order-subtotal']
        .'</div>
     </aside>';
 
@@ -88,17 +93,19 @@ if (empty('REX_LINK[1]')) {
             $yform->setValueField('text', array('type_of_work', 'Art'));
             $yform->setValueField('text', array('title', 'Titel'));
 
-            $yform->setValueField('fieldset', array('spine_data', 'Daten Buchrücken'));
-            $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
-            $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-6">'));
-            $yform->setValueField('text', array('spine_firstnname', 'Vorname'));
-            $yform->setValueField('html', array('html', 'HTML', '</div>'));
-            $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-6">'));
-            $yform->setValueField('text', array('spine_lastnname', 'Nachname'));
-            $yform->setValueField('html', array('html', 'HTML', '</div>'));
-            $yform->setValueField('html', array('html', 'HTML', '</div>'));
-            $yform->setValueField('text', array('spine_type_of_work', 'Art'));
-            $yform->setValueField('text', array('spine_title', 'Titel'));
+            if ($order_config['FIXATION_SPECIAL']) {
+                $yform->setValueField('fieldset', array('spine_data', 'Daten Buchrücken'));
+                $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
+                $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-6">'));
+                $yform->setValueField('text', array('spine_firstnname', 'Vorname'));
+                $yform->setValueField('html', array('html', 'HTML', '</div>'));
+                $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-6">'));
+                $yform->setValueField('text', array('spine_lastnname', 'Nachname'));
+                $yform->setValueField('html', array('html', 'HTML', '</div>'));
+                $yform->setValueField('html', array('html', 'HTML', '</div>'));
+                $yform->setValueField('text', array('spine_type_of_work', 'Art'));
+                $yform->setValueField('text', array('spine_title', 'Titel'));
+            }
 
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('fieldset', array('sidebar', '', 'col-12 col-md-4'));
@@ -107,7 +114,7 @@ if (empty('REX_LINK[1]')) {
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 d-flex">'));
-            $yform->setValueField('html', array('html', 'HTML', '<a class="btn btn-secondary" href="">Zurück</a>'));
+            $yform->setValueField('html', array('html', 'HTML', '<a class="btn btn-secondary" href="'.rex_getUrl('REX_LINK[1]').'">Zurück</a>'));
             $yform->setValueField('submit', array('submit', 'weiter', 'Weiter', '', '', 'btn-primary ml-auto'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));

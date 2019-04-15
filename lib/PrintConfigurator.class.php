@@ -30,6 +30,7 @@ class PrintConfigurator
     protected $fixations = [];
     protected $fixations_total_price = 0;
     protected $fixations_total_amount = 1;
+    protected $fixation_special_type = false;
 
     protected $fixation_additions = [];
     protected $fixation_additions_total_price = 0;
@@ -38,6 +39,14 @@ class PrintConfigurator
     protected $fixation_additions_option = 0;
     protected $fixation_additions_option_total_price = 0;
     protected $fixation_additions_option_total_amount = 0;
+
+    /**
+     * @param bool $value
+     */
+    private function setFixationType(bool $value)
+    {
+        $this->fixation_special_type = $value;
+    }
 
     /**
      * @param $reference
@@ -100,7 +109,11 @@ class PrintConfigurator
                     'price' => $price,
                     'amount' => $postData[$key],
                     'label' => $value['name'],
+                    'type' => $value['type'],
                 ];
+                if ('FIXATION_SPECIAL' == $value['type']) {
+                    self::setFixationType(true);
+                }
             }
         }
 
@@ -260,6 +273,9 @@ class PrintConfigurator
             'order-subtotal' => self::generateSidebarDomLight('subtotal', $this->total_price, 'Zwischensumme', 'EUR', false),
             'order-fixations' => $fixations_dom,
         ];
+
+        $prices['fixations'] = $this->fixations;
+        $prices['FIXATION_SPECIAL'] = $this->fixation_special_type;
 
         // @ToDo: Remove this before release
         //get REDAXO config file
