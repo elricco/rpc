@@ -94,8 +94,8 @@ if (empty('REX_LINK[1]')) {
     $yform->setValueField('fieldset', array('sidebar', '', 'col-2', 'onlyclose'));
     $yform->setValueField('html', array('html', 'HTML', '</div>'));
     $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
-    $yform->setValueField('html', array('html', 'HTML', '<div class="col-12">'));
-    $yform->setValueField('submit', array('submit', 'Weiter'));
+    $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 d-flex">'));
+    $yform->setValueField('submit', array('submit', 'weiter', 'Weiter', '', '', 'btn-primary ml-auto'));
     $yform->setValueField('html', array('html', 'HTML', '</div>'));
     $yform->setValueField('html', array('html', 'HTML', '</div>'));
     echo $yform->getForm();
