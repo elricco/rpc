@@ -77,7 +77,7 @@ $(function () {
     });
 
     // set update listener
-    slider_baw.noUiSlider.on('update', function( values, handle ) {
+    slider_baw.noUiSlider.on('set', function( values, handle ) {
         input_baw.value = Number.parseFloat(values[handle]).toFixed(0); // convert number to no decimals
         slider_clr.noUiSlider.updateOptions({
             range: {
@@ -87,7 +87,7 @@ $(function () {
         });
         calculate_price();
     });
-    input_baw.addEventListener('change', function () {
+    input_baw.addEventListener('keyup', function () {
         slider_baw.noUiSlider.set(this.value);
         slider_clr.noUiSlider.updateOptions({
             range: {
@@ -99,11 +99,11 @@ $(function () {
     });
 
     // set update listener
-    slider_clr.noUiSlider.on('update', function( values, handle ) {
+    slider_clr.noUiSlider.on('set', function( values, handle ) {
         input_clr.value = Number.parseFloat(values[handle]).toFixed(0); // convert number to no decimals
         calculate_price();
     });
-    input_clr.addEventListener('change', function () {
+    input_clr.addEventListener('keyup', function () {
         slider_clr.noUiSlider.set(this.value);
         calculate_price();
     });
@@ -116,13 +116,14 @@ $(function () {
     });
 
     // set update listener
-    $('input[name*="fixation"]').on('change', function () {
+    $('input[name*="fixation"]').on('keyup', function () {
         calculate_price();
     });
 
     function init_calculator() {
         getBasics();
         replaceTextWithHtml($('[name*="paper_options"]').next());
+        calculate_price();
     }
 
     init_calculator();
