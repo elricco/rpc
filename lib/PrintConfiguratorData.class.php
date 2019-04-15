@@ -298,6 +298,7 @@ class PrintConfiguratorData
             }
             $fixation_radio_attributes['formatted']['fixation_'.$fixation['id']] = [
                 'id' => $fixation['id'],
+                'type' => $fixation['fixation_type'],
                 'name' => $fixation['fixation_name'],
                 'price' => $fixation['fixation_price'],
                 'vat' => $fixation['vat_rate'],
