@@ -107,6 +107,7 @@ class PrintConfigurator
                 $internalReference[$key] = [
                     'id' => $value['id'],
                     'price' => $price,
+                    'single_price' => $value['price'],
                     'amount' => $postData[$key],
                     'label' => $value['name'],
                     'type' => $value['type'],
@@ -225,9 +226,9 @@ class PrintConfigurator
         $prices['prices']['paper_price'] = $this->paper_option_price;
 
         //re-calculate prices if double-sided prints is checked
-        $this->one_or_double_sided = $data['one_or_double-sided'];
+        $this->one_or_double_sided = boolval($data['one_or_double-sided']);
 
-        if (1 == $this->one_or_double_sided) {
+        if ($this->one_or_double_sided) {
             $this->total_pages = round(round($this->total_pages / 2) * 2) / 2;
             if (1 == $this->isOdd($this->total_pages)) {
                 ++$this->total_pages;
@@ -274,7 +275,25 @@ class PrintConfigurator
             'order-fixations' => $fixations_dom,
         ];
 
-        $prices['fixations'] = $this->fixations;
+        //item collection
+        $prices['item_collection']['baw_pages'] = $this->baw_pages;
+        $prices['item_collection']['baw_pages_single'] = $this->baw_pages_single;
+        $prices['item_collection']['clr_pages'] = $this->clr_pages;
+        $prices['item_collection']['clr_pages_single'] = $this->clr_pages_single;
+        $prices['item_collection']['total_pages'] = $this->total_pages;
+        $prices['item_collection']['total_pages_single'] = $this->total_pages_single;
+        $prices['item_collection']['one_or_double_sided'] = $this->one_or_double_sided;
+        $prices['item_collection']['order_flat_charge'] = $basics['formatted_basics']['order_flat_charge'];
+        $prices['item_collection']['data_check'] = $basics['data_check']['formatted'][$this->data_check];
+        $prices['item_collection']['paper'] = $basics['papers']['formatted'][$this->paper_option];
+        $prices['item_collection']['fixations'] = $this->fixations;
+        $prices['item_collection']['fixations_additions'] = $this->fixation_additions;
+        $prices['item_collection']['fixations_additions_option'] = $basics['fixation_options']['formatted'][$this->fixation_additions_option];
+        $prices['item_collection']['fixations_additions_option']['single_price'] = $basics['fixation_options']['formatted'][$this->fixation_additions_option]['price'];
+        $prices['item_collection']['fixations_additions_option']['price'] = $this->fixation_additions_option_total_price;
+        $prices['item_collection']['fixations_additions_option']['amount'] = $this->fixation_additions_option_total_amount;
+
+        //is it special?
         $prices['FIXATION_SPECIAL'] = $this->fixation_special_type;
 
         // @ToDo: Remove this before release
