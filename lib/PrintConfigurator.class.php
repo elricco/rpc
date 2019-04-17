@@ -287,6 +287,9 @@ class PrintConfigurator
         $prices['item_collection']['data_check'] = $basics['data_check']['formatted'][$this->data_check];
         $prices['item_collection']['paper'] = $basics['papers']['formatted'][$this->paper_option];
         $prices['item_collection']['fixations'] = $this->fixations;
+        foreach ($this->fixations as $fixation) {
+            $prices['item_collection']['fixations']['fixation_'.$fixation['id']]['templates'] = $basics['fixations']['formatted']['fixation_'.$fixation['id']]['templates'];
+        }
         $prices['item_collection']['fixations_additions'] = $this->fixation_additions;
         $prices['item_collection']['fixations_additions_option'] = $basics['fixation_options']['formatted'][$this->fixation_additions_option];
         $prices['item_collection']['fixations_additions_option']['single_price'] = $basics['fixation_options']['formatted'][$this->fixation_additions_option]['price'];
