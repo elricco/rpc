@@ -112,6 +112,39 @@ class PrintConfiguratorData
         return $options;
     }
 
+    private function getTemplatesById($id)
+    {
+        $templates = [];
+        if (null != $id) {
+            $ids = explode(',', $id);
+            foreach ($ids as $template) {
+                $sql = rex_sql::factory();
+                $query = "SELECT rex_rpc_fixation_templates.*, group_concat(rex_rpc_template_colors.color_name ORDER BY rex_rpc_template_colors.id) color_names
+                          FROM rex_rpc_fixation_templates
+                          LEFT JOIN rex_rpc_template_colors
+                          ON find_in_set(rex_rpc_template_colors.id, rex_rpc_fixation_templates.template_colors) > 0
+                          WHERE rex_rpc_fixation_templates.id = ".$template;
+                $rows = $sql->getArray($query);
+                foreach ($rows as $cover) {
+                    $templates['template_'.$cover['id']] = [
+                        'id' => $cover['id'],
+                        'name' => $cover['template_name'],
+                        'description' => $cover['template_description'],
+                        'image' => $cover['template_image'],
+                        'colors' => $cover['color_names'],
+                    ];
+                }
+            }
+        }
+
+        return $templates;
+    }
+
+    /**
+     * @return array
+     *
+     * @throws rex_sql_exception
+     */
     public function getFixationsAdditionsOptions()
     {
         $options = [];
@@ -304,6 +337,7 @@ class PrintConfiguratorData
                 'vat' => $fixation['vat_rate'],
                 'min' => $fixation['min'],
                 'max' => $fixation['max'],
+                'templates' => self::getTemplatesById($fixation['fixation_templates']),
             ];
         }
 
