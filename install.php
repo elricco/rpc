@@ -50,11 +50,26 @@ function rpc_import_table_schemes()
             $message .= rex_view::error('Exception: '.$e->getMessage());
         }
     }
-
     if (1 != rex_sql_table::get(rex::getTable('rpc_fixation_addition_options'))->exists()) {
         $fixation_addition_options = rex_file::get(rex_path::addon('rpc', 'install/tablesets/rpc_fixation_addition_options.json'));
         try {
             rex_yform_manager_table_api::importTablesets($fixation_addition_options);
+        } catch (Exception $e) {
+            $message .= rex_view::error('Exception: '.$e->getMessage());
+        }
+    }
+    if (1 != rex_sql_table::get(rex::getTable('rpc_fixation_templates'))->exists()) {
+        $fixation_templates = rex_file::get(rex_path::addon('rpc', 'install/tablesets/rpc_fixation_templates.json'));
+        try {
+            rex_yform_manager_table_api::importTablesets($fixation_templates);
+        } catch (Exception $e) {
+            $message .= rex_view::error('Exception: '.$e->getMessage());
+        }
+    }
+    if (1 != rex_sql_table::get(rex::getTable('rpc_template_colors'))->exists()) {
+        $template_colors = rex_file::get(rex_path::addon('rpc', 'install/tablesets/rpc_template_colors.json'));
+        try {
+            rex_yform_manager_table_api::importTablesets($template_colors);
         } catch (Exception $e) {
             $message .= rex_view::error('Exception: '.$e->getMessage());
         }
