@@ -107,6 +107,42 @@ if (empty('REX_LINK[1]')) {
                 $yform->setValueField('text', array('spine_title', 'Titel'));
             }
 
+            foreach ($order_config['item_collection']['fixations'] as $fixation_template) {
+                if (!empty($fixation_template['templates'])) {
+                    $yform->setValueField('fieldset', array('fixation_template_'.$fixation_template['id'], $fixation_template['label']));
+                    $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
+                    $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-6">'));
+
+                    $template = '';
+                    $colors = '';
+                    $color_change = '';
+                    $i = 0;
+                    foreach ($fixation_template['templates'] as $key => $fx_template) {
+                        $template .= '"'.$fx_template['name'].'":"template_'.$fx_template['id'].'"';
+                        if (0 == $i) {
+                            $colors = $fx_template['colors'];
+                            $color_change .= '<span id="template_'.$fx_template['id'].'" data-template-colors="'.$fx_template['colors'].'"></span>';
+                        } else {
+                            $color_change .= '<span id="template_'.$fx_template['id'].'" data-template-colors="'.$fx_template['colors'].'"></span>';
+                        }
+
+                        if ($i < (count($fixation_template['templates']) - 1)) {
+                            $template .= ',';
+                            ++$i;
+                        }
+                    }
+
+                    $yform->setValueField('choice', ['fixation_'.$fixation_template['id'].'_template', 'Template', '{'.$template.'}', 0, 0, '0']);
+
+                    $yform->setValueField('html', array('html', 'HTML', '</div>'));
+                    $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-6">'));
+                    $yform->setValueField('html', array('html', 'HTML', $color_change));
+                    $yform->setValueField('choice', ['fixation_'.$fixation_template['id'].'_template_color', 'Farbe', $colors, 0, 0, '0']);
+                    $yform->setValueField('html', array('html', 'HTML', '</div>'));
+                    $yform->setValueField('html', array('html', 'HTML', '</div>'));
+                }
+            }
+
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('fieldset', array('sidebar', '', 'col-12 col-md-4'));
             $yform->setValueField('html', array('html', 'HTML', $sidebar));
