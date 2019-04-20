@@ -128,4 +128,24 @@ $(function () {
     if($('#config_form').length) {
         init_calculator();
     }
+
+    if($('#options_form').length) {
+        $('select[name*="_template"]').on('change', function () {
+            let $templateColorId = $('#' + $(this).val());
+            let $fixationTemplate = $(this).attr('name') + '_color';
+            let fxTemp = $('select[name="' + $fixationTemplate + '"]');
+            let c = {};
+            let colors = $templateColorId.data('template-colors').split(',');
+            $.each(colors, function (index, value) {
+                c[value] = value;
+            });
+
+            fxTemp.empty(); // remove old options
+            $.each(c, function(key,value) {
+                fxTemp.append($("<option></option>")
+                    .attr("value", value).text(key));
+            });
+        });
+
+    }
 });

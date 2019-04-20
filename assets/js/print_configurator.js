@@ -118,6 +118,24 @@ $(function () {
   if ($('#config_form').length) {
     init_calculator();
   }
+
+  if ($('#options_form').length) {
+    $('select[name*="_template"]').on('change', function () {
+      var $templateColorId = $('#' + $(this).val());
+      var $fixationTemplate = $(this).attr('name') + '_color';
+      var fxTemp = $('select[name="' + $fixationTemplate + '"]');
+      var c = {};
+      var colors = $templateColorId.data('template-colors').split(',');
+      $.each(colors, function (index, value) {
+        c[value] = value;
+      });
+      fxTemp.empty(); // remove old options
+
+      $.each(c, function (key, value) {
+        fxTemp.append($("<option></option>").attr("value", value).text(key));
+      });
+    });
+  }
 });
 
 },{"nouislider":2}],2:[function(require,module,exports){
