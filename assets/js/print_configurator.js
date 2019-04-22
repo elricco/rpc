@@ -120,6 +120,22 @@ $(function () {
   }
 
   if ($('#options_form').length) {
+    if ($('#yform-options_form-spine_data').length) {
+      $('[name="firstname"]').on('keypress keyup blur', function () {
+        $('[name="spine_firstname"]').val($(this).val());
+      });
+      $('[name="lastname"]').on('keypress keyup blur', function () {
+        $('[name="spine_lastname"]').val($(this).val());
+      });
+      $('[name="type_of_work"]').on('keypress keyup blur', function () {
+        $('[name="spine_type_of_work"]').val($(this).val());
+      });
+      $('[name="title"]').on('keypress keyup blur', function () {
+        $('[name="spine_title"]').val($(this).val());
+      });
+      console.log('its on');
+    }
+
     $('select[name*="_template"]').on('change', function () {
       var $templateColorId = $('#' + $(this).val());
       var $fixationTemplate = $(this).attr('name') + '_color';
