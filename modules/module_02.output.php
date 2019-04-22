@@ -77,10 +77,10 @@ if (empty('REX_LINK[1]')) {
             $yform->setValueField('fieldset', array('name_and_number', $title_options));
             $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-6">'));
-            $yform->setValueField('text', array('firstnname', 'Vorname',  '',  '',  '{"placeholder":"Vorname","required":"required"}'));
+            $yform->setValueField('text', array('firstname', 'Vorname',  '',  '',  '{"placeholder":"Vorname","required":"required"}'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-6">'));
-            $yform->setValueField('text', array('lastnname', 'Nachname',  '',  '',  '{"placeholder":"Nachname","required":"required"}'));
+            $yform->setValueField('text', array('lastname', 'Nachname',  '',  '',  '{"placeholder":"Nachname","required":"required"}'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
@@ -98,10 +98,10 @@ if (empty('REX_LINK[1]')) {
                 $yform->setValueField('fieldset', array('spine_data', 'Daten Buchrücken'));
                 $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
                 $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-6">'));
-                $yform->setValueField('text', array('spine_firstnname',  'Vorname',  '',  '',  '{"placeholder":"Vorname","required":"required"}'));
+                $yform->setValueField('text', array('spine_firstname',  'Vorname',  '',  '',  '{"placeholder":"Vorname","required":"required"}'));
                 $yform->setValueField('html', array('html', 'HTML', '</div>'));
                 $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-6">'));
-                $yform->setValueField('text', array('spine_lastnname', 'Nachname',  '',  '',  '{"placeholder":"Nachname","required":"required"}'));
+                $yform->setValueField('text', array('spine_lastname', 'Nachname',  '',  '',  '{"placeholder":"Nachname","required":"required"}'));
                 $yform->setValueField('html', array('html', 'HTML', '</div>'));
                 $yform->setValueField('html', array('html', 'HTML', '</div>'));
                 $yform->setValueField('text', array('spine_type_of_work', 'Art',  '',  '',  '{"placeholder":"Art","required":"required"}'));
