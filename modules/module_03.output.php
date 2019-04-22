@@ -77,6 +77,7 @@ if (empty('REX_LINK[1]')) {
             $yform->setValueField('text', array('lastname', 'Nachname',  $options_config['lastname'],  '',  '{"placeholder":"Nachname","required":"required"}'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
+            $yform->setValueField('text', array('additional_info', 'Zusatz',  '',  '',  '{"placeholder":"z.B. Etage, Firma, etc."}'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-8">'));
             $yform->setValueField('text', array('street', 'Straße',  '',  '',  '{"placeholder":"Straße","required":"required"}'));
@@ -85,7 +86,14 @@ if (empty('REX_LINK[1]')) {
             $yform->setValueField('text', array('street_no', 'Nr.',  '',  '',  '{"placeholder":"Nr.","required":"required"}'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
-            $yform->setValueField('text', array('additional_info', 'Zusatz',  '',  '',  '{"placeholder":"z.B. Etage, Firma, etc."}'));
+            $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
+            $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-4">'));
+            $yform->setValueField('text', array('zip', 'PLZ',  '',  '',  '{"placeholder":"z.B. 36043","required":"required"}'));
+            $yform->setValueField('html', array('html', 'HTML', '</div>'));
+            $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-8">'));
+            $yform->setValueField('text', array('city', 'Ort',  '',  '',  '{"placeholder":"z.B. Fulda.","required":"required"}'));
+            $yform->setValueField('html', array('html', 'HTML', '</div>'));
+            $yform->setValueField('html', array('html', 'HTML', '</div>'));
 
             $yform->setValueField('choice', ["delivery_address_same_as_billing_address", "", "Rechnungsadresse entspricht Lieferadresse", 1, 1]);
 
@@ -99,6 +107,7 @@ if (empty('REX_LINK[1]')) {
             $yform->setValueField('text', array('billing_lastname', 'Nachname',  $options_config['lastname'],  '',  '{"placeholder":"Nachname","required":"required"}'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
+            $yform->setValueField('text', array('billing_additional_info', 'Zusatz',  '',  '',  '{"placeholder":"z.B. Etage, Firma, etc."}'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-8">'));
             $yform->setValueField('text', array('billing_street', 'Straße',  '',  '',  '{"placeholder":"Straße","required":"required"}'));
@@ -107,7 +116,14 @@ if (empty('REX_LINK[1]')) {
             $yform->setValueField('text', array('billing_street_no', 'Nr.',  '',  '',  '{"placeholder":"Nr.","required":"required"}'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
-            $yform->setValueField('text', array('billing_additional_info', 'Zusatz',  '',  '',  '{"placeholder":"z.B. Etage, Firma, etc."}'));
+            $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
+            $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-4">'));
+            $yform->setValueField('text', array('billing_zip', 'PLZ',  '',  '',  '{"placeholder":"z.B. 36043","required":"required"}'));
+            $yform->setValueField('html', array('html', 'HTML', '</div>'));
+            $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-8">'));
+            $yform->setValueField('text', array('billing_city', 'Ort',  '',  '',  '{"placeholder":"z.B. Fulda.","required":"required"}'));
+            $yform->setValueField('html', array('html', 'HTML', '</div>'));
+            $yform->setValueField('html', array('html', 'HTML', '</div>'));
 
             $yform->setValueField('fieldset', array('contact_infos', 'Kontaktinformationen'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
