@@ -8,6 +8,10 @@ if (empty('REX_LINK[1]')) {
     // Get Session vars
     //$session = rex_session('order', 'array', '');
 
+    if (!isset($_SESSION)) {
+        session_start();
+    }
+
     $rpcData = new PrintConfiguratorData();
     $data = $rpcData->getData();
     $order_flat_charge = $data['dom_elements']['order_flat_charge'];
@@ -47,6 +51,7 @@ if (empty('REX_LINK[1]')) {
     $yform->setDebug(true);
     $yform->setObjectparams('real_field_names', 1);
     $yform->setObjectparams('article_id', rex_article::getCurrentId());
+    $yform->setRedaxoVars(REX_ARTICLE_ID);
     $yform->setActionField('callback', array('PrintConfigurator::setOrder'));
     $yform->setActionField('redirect', array('REX_LINK[1]'));
     $yform->setObjectparams('form_name', 'config_form');

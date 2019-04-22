@@ -6,11 +6,11 @@ if (empty('REX_LINK[1]')) {
     }
 } elseif (empty('REX_LINK[2]')) {
     if (rex::isBackend()) {
-        echo 'Bitte den Link zur Seite mit dem Rechnungsdaten setzen!';
+        echo 'Bitte den Link zur Seite mit den Rechnungsdaten setzen!';
     }
 } else {
     //check if session has value order - if not redirect to print configurator
-    if ((PHP_SESSION_ACTIVE != session_status()) && !rex::isBackend()) {
+    if (!isset($_SESSION) && !rex::isBackend()) {
         rex_redirect('REX_LINK[1]');
     } else {
         if (empty(rex_session('order', 'array', ''))) {
@@ -64,7 +64,8 @@ if (empty('REX_LINK[1]')) {
             $yform->setDebug(true);
             $yform->setObjectparams('real_field_names', 1);
             $yform->setObjectparams('article_id', rex_article::getCurrentId());
-
+            $yform->setRedaxoVars(REX_ARTICLE_ID);
+            $yform->setActionField('callback', array('PrintConfigurator::setOptions'));
             $yform->setActionField('redirect', array('REX_LINK[2]'));
             $yform->setObjectparams('form_name', 'options_form');
 
