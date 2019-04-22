@@ -118,6 +118,7 @@ if (empty('REX_LINK[1]')) {
             $yform->setValueField('email', ['email_repeat','E-Mail-Adresse bestätigen', '',  '', '{"placeholder":"E-Mail Adresse wiederholen","required":"required"}']);
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
+            $yform->setValueField('text', array('phone', 'Telefon / Mobilnummer',  '',  '',  '{"placeholder":"z.B. 0661 41 09 51 51"}'));
 
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('fieldset', array('sidebar', '', 'col-12 col-md-4'));
