@@ -77,35 +77,35 @@ if (empty('REX_LINK[1]')) {
             $yform->setValueField('fieldset', array('name_and_number', $title_options));
             $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-6">'));
-            $yform->setValueField('text', array('firstnname', 'Vorname'));
+            $yform->setValueField('text', array('firstnname', 'Vorname',  '',  '',  '{"placeholder":"Vorname","required":"required"}'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-6">'));
-            $yform->setValueField('text', array('lastnname', 'Nachname'));
+            $yform->setValueField('text', array('lastnname', 'Nachname',  '',  '',  '{"placeholder":"Nachname","required":"required"}'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-9">'));
-            $yform->setValueField('text', array('student_number', 'Matrikelnummer'));
+            $yform->setValueField('text', array('student_number', 'Matrikelnummer',  '',  '',  '{"placeholder":"Matrikelnummer","required":"required"}'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-3">'));
             $yform->setValueField('date', array('date', 'Jahr', '2000', '+25', 'YYYY', '1', '', 'select'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
-            $yform->setValueField('text', array('type_of_work', 'Art'));
-            $yform->setValueField('text', array('title', 'Titel'));
+            $yform->setValueField('text', array('type_of_work', 'Art',  '',  '',  '{"placeholder":"Art","required":"required"}'));
+            $yform->setValueField('text', array('title', 'Titel',  '',  '',  '{"placeholder":"Titel","required":"required"}'));
 
             if ($order_config['FIXATION_SPECIAL']) {
                 $yform->setValueField('fieldset', array('spine_data', 'Daten Buchrücken'));
                 $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
                 $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-6">'));
-                $yform->setValueField('text', array('spine_firstnname', 'Vorname'));
+                $yform->setValueField('text', array('spine_firstnname',  'Vorname',  '',  '',  '{"placeholder":"Vorname","required":"required"}'));
                 $yform->setValueField('html', array('html', 'HTML', '</div>'));
                 $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-6">'));
-                $yform->setValueField('text', array('spine_lastnname', 'Nachname'));
+                $yform->setValueField('text', array('spine_lastnname', 'Nachname',  '',  '',  '{"placeholder":"Nachname","required":"required"}'));
                 $yform->setValueField('html', array('html', 'HTML', '</div>'));
                 $yform->setValueField('html', array('html', 'HTML', '</div>'));
-                $yform->setValueField('text', array('spine_type_of_work', 'Art'));
-                $yform->setValueField('text', array('spine_title', 'Titel'));
+                $yform->setValueField('text', array('spine_type_of_work', 'Art',  '',  '',  '{"placeholder":"Art","required":"required"}'));
+                $yform->setValueField('text', array('spine_title', 'Titel',  '',  '',  '{"placeholder":"Titel","required":"required"}'));
             }
 
             foreach ($order_config['item_collection']['fixations'] as $fixation_template) {
