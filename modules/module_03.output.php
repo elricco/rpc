@@ -60,7 +60,7 @@ if (empty('REX_LINK[1]')) {
             $yform->setRedaxoVars(REX_ARTICLE_ID);
             $yform->setActionField('callback', array('PrintConfigurator::setAddress'));
             $yform->setActionField('redirect', array('REX_LINK[2]'));
-            $yform->setObjectparams('form_name', 'options_form');
+            $yform->setObjectparams('form_name', 'billing_form');
 
             // open left area
             $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
