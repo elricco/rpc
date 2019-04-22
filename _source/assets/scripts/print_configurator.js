@@ -144,7 +144,6 @@ $(function () {
             $('[name="title"]').on('keypress keyup blur', function() {
                 $('[name="spine_title"]').val($(this).val());
             });
-            console.log('its on');
         }
 
         $('select[name*="_template"]').on('change', function () {
@@ -164,5 +163,66 @@ $(function () {
             });
         });
 
+    }
+
+    if($('#billing_form').length) {
+        $('[name*="delivery_address_same_as_billing_address"]').on('click', function () {
+            if($(this).prop('checked')) {
+                $('#yform-billing_form-billing_address').hide();
+                $('[name="billing_firstname"]').val($('[name="firstname"]').val());
+                $('[name="billing_lastname"]').val($('[name="lastname"]').val());
+                $('[name="billing_street"]').val($('[name="street"]').val());
+                $('[name="billing_street_no"]').val($('[name="street_no"]').val());
+                $('[name="billing_additional_info"]').val($('[name="additional_info"]').val());
+                $('[name="billing_zip"]').val($('[name="zip"]').val());
+                $('[name="billing_city"]').val($('[name="city"]').val());
+                let id = $('[name="salutation"]:checked').attr('id');
+                let split_id = id.split('-');
+                let last_string = split_id.slice(-1);
+                $.each($('[id$="-' + last_string[0] + '"]'), function (index, value) {
+                    $(this).prop('checked', true);
+                });
+
+                $('[name="salutation"]').on('click', function () {
+                    let id = $(this).attr('id');
+                    let split_id = id.split('-');
+                    let last_string = split_id.slice(-1);
+                    $.each($('[id$="-' + last_string[0] + '"]'), function (index, value) {
+                        $(this).prop('checked', true);
+                    });
+                });
+                $('[name="firstname"]').on('keypress keyup blur', function () {
+                    $('[name="billing_firstname"]').val($(this).val());
+                });
+                $('[name="lastname"]').on('keypress keyup blur', function () {
+                    $('[name="billing_lastname"]').val($(this).val());
+                });
+                $('[name="street"]').on('keypress keyup blur', function () {
+                    $('[name="billing_street"]').val($(this).val());
+                });
+                $('[name="street_no"]').on('keypress keyup blur', function () {
+                    $('[name="billing_street_no"]').val($(this).val());
+                });
+                $('[name="additional_info"]').on('keypress keyup blur', function () {
+                    $('[name="billing_additional_info"]').val($(this).val());
+                });
+                $('[name="zip"]').on('keypress keyup blur', function () {
+                    $('[name="billing_zip"]').val($(this).val());
+                });
+                $('[name="city"]').on('keypress keyup blur', function () {
+                    $('[name="billing_city"]').val($(this).val());
+                });
+            } else {
+                $('#yform-billing_form-billing_address').show();
+                $('[name="salutation"]').off();
+                $('[name="firstname"]').off();
+                $('[name="lastname"]').off();
+                $('[name="street"]').off();
+                $('[name="street_no"]').off();
+                $('[name="additional_info"]').off();
+                $('[name="zip"]').off();
+                $('[name="city"]').off();
+            }
+        })
     }
 });
