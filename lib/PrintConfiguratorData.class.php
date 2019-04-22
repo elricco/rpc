@@ -177,6 +177,7 @@ class PrintConfiguratorData
         $data_check = [];
         $data_check_radio_options = '';
         $count = 0;
+        $currency_symbol = 'EUR';
 
         foreach ($basics as $key => $basic) {
             if ('data_check_charge' == $basic['price_type'] && 0 == $count) {
@@ -260,7 +261,7 @@ class PrintConfiguratorData
 
         $paper_radio_attributes = [];
         $paper_radio_attributes['unformatted'] = [$papers];
-        $paper_default = $papers['0']['0']['id'];
+        $paper_default = $papers['0']['id'];
         $paper_radio_options = '';
         // Define output of papers (for later)
         foreach ($papers as $key => $paper) {
@@ -316,6 +317,7 @@ class PrintConfiguratorData
         $fixation_radio_attributes = [];
         $fixation_radio_attributes['unformatted'] = $fixations;
 
+        $fixation_radio_options = '';
         // Define output of fixations (for later)
         foreach ($fixations as $key => $fixation) {
             if (!isset($fixation_default) && empty($fixation_default)) {
