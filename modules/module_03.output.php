@@ -19,16 +19,22 @@ if (empty('REX_LINK[1]')) {
             $order_config = rex_session('order', 'array', '');
             $options_config = rex_session('options', 'array', '');
 
-            //debug stuff
-            dump($order_config);
-            dump($options_config);
-
             $rpcData = new PrintConfiguratorData();
             $data = $rpcData->format_productions();
             $deliverys = $rpcData->format_deliverys();
 
-            dump($data);
-            dump($deliverys);
+            //get REDAXO config file
+            $configFile = rex_path::coreData('config.yml');
+            $config = rex_file::getConfig($configFile);
+
+            //when debug is set and true, include function(s)
+            if (isset($config['debug']['enabled']) && $config['debug']['enabled']) {
+                //debug stuff
+                dump($order_config);
+                dump($options_config);
+                dump($data);
+                dump($deliverys);
+            }
 
             $sidebar = '
     <aside class="price-sidebar">

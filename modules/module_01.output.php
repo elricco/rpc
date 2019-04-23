@@ -18,9 +18,17 @@ if (empty('REX_LINK[1]')) {
     $page_prices = $data['formatted_basics']['page_prices'];
     $fixations = $data['fixations']['formatted'];
     $fixation_additions = $data['fixation_additions']['formatted'];
-    //debug stuff
-    dump($data);
-    //dump($page_prices);
+
+    //get REDAXO config file
+    $configFile = rex_path::coreData('config.yml');
+    $config = rex_file::getConfig($configFile);
+
+    //when debug is set and true, include function(s)
+    if (isset($config['debug']['enabled']) && $config['debug']['enabled']) {
+        //debug stuff
+        dump($data);
+        //dump($page_prices);
+    }
 
     $sidebar = '
     <aside class="price-sidebar">

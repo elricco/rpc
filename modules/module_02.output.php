@@ -20,9 +20,16 @@ if (empty('REX_LINK[1]')) {
             $rpcData = new PrintConfiguratorData();
             $data = $rpcData->getData();
 
-            //debug stuff
-            dump($order_config);
-            dump($data);
+            //get REDAXO config file
+            $configFile = rex_path::coreData('config.yml');
+            $config = rex_file::getConfig($configFile);
+
+            //when debug is set and true, include function(s)
+            if (isset($config['debug']['enabled']) && $config['debug']['enabled']) {
+                //debug stuff
+                dump($order_config);
+                dump($data);
+            }
 
             if ($order_config['FIXATION_SPECIAL']) {
                 $title_options = 'Daten Titelseite & CD/DVD';
