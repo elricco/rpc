@@ -78,6 +78,40 @@ class PrintConfiguratorData
      *
      * @throws rex_sql_exception
      */
+    public static function getProductions()
+    {
+        $sql = rex_sql::factory();
+        $query = 'SELECT rex_rpc_production.*, rex_rpc_vat_types.vat_description, rex_rpc_vat_types.vat_rate 
+                  FROM rex_rpc_production
+                  LEFT JOIN rex_rpc_vat_types 
+                  ON rex_rpc_production.vat = rex_rpc_vat_types.id';
+        $rows = $sql->getArray($query);
+
+        return $rows;
+    }
+
+    /**
+     * @return array
+     *
+     * @throws rex_sql_exception
+     */
+    public static function getDeliverys()
+    {
+        $sql = rex_sql::factory();
+        $query = 'SELECT rex_rpc_delivery.*, rex_rpc_vat_types.vat_description, rex_rpc_vat_types.vat_rate 
+                  FROM rex_rpc_delivery
+                  LEFT JOIN rex_rpc_vat_types 
+                  ON rex_rpc_delivery.vat = rex_rpc_vat_types.id';
+        $rows = $sql->getArray($query);
+
+        return $rows;
+    }
+
+    /**
+     * @return array
+     *
+     * @throws rex_sql_exception
+     */
     private function getFixationsAdditions()
     {
         $options = [];
@@ -301,6 +335,112 @@ class PrintConfiguratorData
         $paper_radio_attributes['paper_json'] = $paper_json;
 
         $data = $paper_radio_attributes;
+
+        return $data;
+    }
+
+    public static function format_productions()
+    {
+        // Get productions
+        try {
+            $productions = self::getProductions();
+        } catch (rex_sql_exception $e) {
+            $productions = 'Couldn\'t get productions: '.$e;
+        }
+
+        $production_radio_attributes = [];
+        $production_radio_attributes['unformatted'] = [$productions];
+        $production_default = $productions['0']['id'];
+        $production_radio_options = '';
+        // Define output of productions (for later)
+        foreach ($productions as $key => $production) {
+            if (!isset($production_default) && empty($production_default)) {
+                $production_default = $production['id'];
+            }
+            $production_radio_options = $production['name'].'<br><small>'.str_replace(array(
+                    ',',
+                    '<p>',
+                    '</p>',
+                ), array('.', '', ''), $production['description']).'</small>';
+            $production_radio_attributes['formatted'][$production['id']] = [
+                'id' => $production['id'],
+                'price' => $production['price'],
+                'vat' => $production['vat_rate'],
+                'label' => $production_radio_options,
+            ];
+        }
+
+        //build json
+        $production_json = '';
+        foreach ($productions as $key => $production) {
+            $label = $production['name'].'<br><small>'.str_replace(array(
+                    ',',
+                    '<p>',
+                    '</p>',
+                ), array('.', '', ''), $production['description']).'</small>';
+            $production_json .= '"'.$label.'":"'.$production['id'].'"';
+            if ($key < (count($productions) - 1)) {
+                $production_json .= ',';
+            }
+        }
+
+        $production_radio_attributes['production_default'] = $production_default;
+        $production_radio_attributes['production_json'] = $production_json;
+
+        $data = $production_radio_attributes;
+
+        return $data;
+    }
+
+    public static function format_deliverys()
+    {
+        // Get deliverys
+        try {
+            $deliverys = self::getDeliverys();
+        } catch (rex_sql_exception $e) {
+            $deliverys = 'Couldn\'t get deliverys: '.$e;
+        }
+
+        $delivery_radio_attributes = [];
+        $delivery_radio_attributes['unformatted'] = [$deliverys];
+        $delivery_default = $deliverys['0']['id'];
+        $delivery_radio_options = '';
+        // Define output of deliverys (for later)
+        foreach ($deliverys as $key => $delivery) {
+            if (!isset($delivery_default) && empty($delivery_default)) {
+                $delivery_default = $delivery['id'];
+            }
+            $delivery_radio_options = $delivery['name'].'<br><small>'.str_replace(array(
+                    ',',
+                    '<p>',
+                    '</p>',
+                ), array('.', '', ''), $delivery['description']).'</small>';
+            $delivery_radio_attributes['formatted'][$delivery['id']] = [
+                'id' => $delivery['id'],
+                'price' => $delivery['price'],
+                'vat' => $delivery['vat_rate'],
+                'label' => $delivery_radio_options,
+            ];
+        }
+
+        //build json
+        $delivery_json = '';
+        foreach ($deliverys as $key => $delivery) {
+            $label = $delivery['name'].'<br><small>'.str_replace(array(
+                    ',',
+                    '<p>',
+                    '</p>',
+                ), array('.', '', ''), $delivery['description']).'</small>';
+            $delivery_json .= '"'.$label.'":"'.$delivery['id'].'"';
+            if ($key < (count($deliverys) - 1)) {
+                $delivery_json .= ',';
+            }
+        }
+
+        $delivery_radio_attributes['delivery_default'] = $delivery_default;
+        $delivery_radio_attributes['delivery_json'] = $delivery_json;
+
+        $data = $delivery_radio_attributes;
 
         return $data;
     }
