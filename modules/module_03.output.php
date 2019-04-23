@@ -69,6 +69,8 @@ if (empty('REX_LINK[1]')) {
             $yform->setActionField('redirect', array('REX_LINK[2]'));
             $yform->setObjectparams('form_name', 'billing_form');
 
+            $yform->setHiddenField('total_price', $order_config['prices']['total_price']);
+
             // open left area
             $yform->setValueField('html', array('html', 'HTML', '<div class="row">'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-8">'));
