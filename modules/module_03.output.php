@@ -23,6 +23,13 @@ if (empty('REX_LINK[1]')) {
             dump($order_config);
             dump($options_config);
 
+            $rpcData = new PrintConfiguratorData();
+            $data = $rpcData->format_productions();
+            $deliverys = $rpcData->format_deliverys();
+
+            dump($data);
+            dump($deliverys);
+
             $sidebar = '
     <aside class="price-sidebar">
         <div class="mb-3">
@@ -91,7 +98,7 @@ if (empty('REX_LINK[1]')) {
             $yform->setValueField('text', array('zip', 'PLZ',  '',  '',  '{"placeholder":"z.B. 36043","required":"required"}'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-8">'));
-            $yform->setValueField('text', array('city', 'Ort',  '',  '',  '{"placeholder":"z.B. Fulda.","required":"required"}'));
+            $yform->setValueField('text', array('city', 'Ort',  '',  '',  '{"placeholder":"z.B. Fulda","required":"required"}'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
 
@@ -121,7 +128,7 @@ if (empty('REX_LINK[1]')) {
             $yform->setValueField('text', array('billing_zip', 'PLZ',  '',  '',  '{"placeholder":"z.B. 36043","required":"required"}'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '<div class="col-12 col-md-8">'));
-            $yform->setValueField('text', array('billing_city', 'Ort',  '',  '',  '{"placeholder":"z.B. Fulda.","required":"required"}'));
+            $yform->setValueField('text', array('billing_city', 'Ort',  '',  '',  '{"placeholder":"z.B. Fulda","required":"required"}'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
 
@@ -136,6 +143,12 @@ if (empty('REX_LINK[1]')) {
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('text', array('phone', 'Telefon / Mobilnummer',  '',  '',  '{"placeholder":"z.B. 0661 41 09 51 51","required":"required"}'));
 
+            $yform->setValueField('fieldset', array('production_time', ''));
+            $yform->setValueField('choice', ['production_options', 'Produktionszeit', '{'.$data['production_json'].'}', 1, 0, $data['production_default']]);
+            
+            $yform->setValueField('fieldset', array('delivery_time', ''));
+            $yform->setValueField('choice', ['delivery_options', 'Lieferung', '{'.$deliverys['delivery_json'].'}', 1, 0, $deliverys['delivery_default']]);
+            
             $yform->setValueField('html', array('html', 'HTML', '</div>'));
             $yform->setValueField('fieldset', array('sidebar', '', 'col-12 col-md-4'));
             $yform->setValueField('html', array('html', 'HTML', $sidebar));
