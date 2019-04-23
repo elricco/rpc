@@ -166,6 +166,9 @@ $(function () {
     }
 
     if($('#billing_form').length) {
+        replaceTextWithHtml($('[name*="production_options"]').next());
+        replaceTextWithHtml($('[name*="delivery_options"]').next());
+
         $('[name*="delivery_address_same_as_billing_address"]').on('click', function () {
             if($(this).prop('checked')) {
                 $('#yform-billing_form-billing_address').hide();
