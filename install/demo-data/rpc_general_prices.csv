@@ -1,0 +1,8 @@
+﻿"id";"price_type";"price_name";"price_description";"price_vat";"price_rate";"pages_min";"pages_max"
+"1";"order_flat_charge";"Auftragspauschale";"";"3";"10.00";"";""
+"2";"setup_flat_charge";"Einrichtungspauschale";"";"3";"5.00";"";""
+"3";"page_baw";"Seiten gesamt";"";"3";"0.01";"10";"494"
+"4";"page_clr";"davon farbige Seiten";"";"3";"0.02";"0";"494"
+"5";"data_check_charge";"Datencheck Basic";"";"3";"0.00";"";""
+"6";"data_check_charge";"Datencheck Premium";"";"3";"7.50";"";""
+"7";"fixation_amount";"Anzahl Bindungen";"";"1";"0.00";"1";"100"

@@ -1,0 +1,4 @@
+﻿"id";"fixation_type";"fixation_name";"fixation_description";"fixation_vat";"fixation_price";"min";"max";"fixation_templates"
+"1";"FIXATION_SPECIAL";"Hardcover";"<p>Premium</p><p></p>";"2";"25.00";"7.00";"40.00";"1,2"
+"2";"FIXATION_NORMAL";"Softcover";"";"2";"14.00";"2.50";"4.00";"3"
+"4";"FIXATION_NORMAL";"Paperback";"<p>mit Deckfolie mattiert<br></p><p></p>";"2";"8.25";"5.00";"50.00";""
