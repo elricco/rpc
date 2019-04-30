@@ -74,6 +74,22 @@ function rpc_import_table_schemes()
             $message .= rex_view::error('Exception: '.$e->getMessage());
         }
     }
+    if (1 != rex_sql_table::get(rex::getTable('rpc_production'))->exists()) {
+        $rpc_production = rex_file::get(rex_path::addon('rpc', 'install/tablesets/rpc_production.json'));
+        try {
+            rex_yform_manager_table_api::importTablesets($rpc_production);
+        } catch (Exception $e) {
+            $message .= rex_view::error('Exception: '.$e->getMessage());
+        }
+    }
+    if (1 != rex_sql_table::get(rex::getTable('rpc_delivery'))->exists()) {
+        $rpc_delivery = rex_file::get(rex_path::addon('rpc', 'install/tablesets/rpc_delivery.json'));
+        try {
+            rex_yform_manager_table_api::importTablesets($rpc_delivery);
+        } catch (Exception $e) {
+            $message .= rex_view::error('Exception: '.$e->getMessage());
+        }
+    }
 
     return $message;
 }
